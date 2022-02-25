@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
      * @throws \Exception
      */
     public function index()
