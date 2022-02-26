@@ -1,45 +1,45 @@
-version: '3.0'
+version: "3"
 
 services:
+  db:
+    image: mysql:5.7
+    container_name: ${PROJECT_NAME}-db
+    volumes:
+      - "db_app:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
+    networks:
+      - symfony
+  php:
+    build:
+      context: ./docker/php
+      args:
+        TIMEZONE: ${TIMEZONE}
+    container_name: ${PROJECT_NAME}-php
+    volumes:
+      - ./app:/var/www/symfony/
+    networks:
+      - symfony
   nginx:
     build:
       context: ./docker/nginx
-    volumes:
-      - ./app:/symfony
     container_name: ${PROJECT_NAME}-nginx
-    restart: always
-    ports:
-      - "8081:80"
-
-  php-fpm:
-    build:
-      context: ./docker/php-fpm
     volumes:
-      - ./app:/symfony
-    restart: always
-    container_name: ${PROJECT_NAME}-php-fpm
-    depends_on:
-      - mysql
-
-  php-cli:
-    build:
-      context: ./docker/php-cli
-    volumes:
-      - ./app:/symfony
-    command: sleep 10000
-    container_name: ${PROJECT_NAME}-php-cli
-
-  mysql:
-    image: mysql:5.7
-    container_name: ${PROJECT_NAME}-mysql
-    restart: always
-    environment:
-      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
-      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
-      - "MYSQL_USER=${MYSQL_USER}"
-      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+      - ./app:/var/www/symfony/
     ports:
-      - 3338:3306
+      - 8081:80
+    networks:
+      - symfony
+    env_file:
+      - .env.nginx.local
 
 volumes:
-  mysql:
+  db_app:
+
+networks:
+  symfony:
