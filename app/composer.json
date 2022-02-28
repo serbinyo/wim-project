@@ -98,7 +98,7 @@
       "php bin/console cache:clear --env=dev"
     ],
     "ci-build-prod"   : [
-      "php7.4 bin/console cache:clear --env=prod --no-debug"
+      "php8.0 bin/console cache:clear --env=prod --no-debug"
     ]
   },
   "conflict"         : {
