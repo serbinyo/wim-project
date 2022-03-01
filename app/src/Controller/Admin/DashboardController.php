@@ -22,9 +22,9 @@ class DashboardController extends AbstractDashboardController
      * @return Response
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @Route("/admin", name="admin")
      */
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
         //return parent::index();

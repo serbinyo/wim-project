@@ -29,8 +29,9 @@ class RegistrationController extends AbstractController
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     *
+     * @Route("/registration", name="app_registration")
      */
-    #[Route('/registration', name: 'app_registration')]
     public function index(Request $request)
     {
         $user = new User();
