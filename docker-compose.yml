@@ -23,6 +23,8 @@ services:
     container_name: ${PROJECT_NAME}-php
     volumes:
       - ./app:/var/www/symfony/
+      - ./app/var/cache:/var/www/symfony/app/var/cache
+      - ./app/vendor:/var/www/symfony/app/vendor
     networks:
       - symfony
   nginx:
@@ -31,6 +33,9 @@ services:
     container_name: ${PROJECT_NAME}-nginx
     volumes:
       - ./app:/var/www/symfony/
+      - ./app/var/cache:/var/www/symfony/app/var/cache
+      - ./app/vendor:/var/www/symfony/app/vendor
+
     ports:
       - 8081:80
     networks:
