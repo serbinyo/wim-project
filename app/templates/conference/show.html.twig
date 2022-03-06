@@ -22,7 +22,7 @@
                 {{ comment.createdAt|format_datetime('medium', 'short') }}
             </small>
 
-            <p>{{ comment.text }}</p>
+            <p>{{ comment.text|raw }}</p>
         {% endfor %}
 
         {% if previous >= 0 %}
