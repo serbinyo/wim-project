@@ -21,12 +21,21 @@ use Twig\Error\SyntaxError;
  */
 class ConferenceController extends AbstractController
 {
+    private Environment $twig;
+
+    /**
+     * ConferenceController constructor.
+     */
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
 
     /**
      * @Route("/", name="homepage")
      *
      *
-     * @param Environment          $twig
      * @param ConferenceRepository $conferenceRepository
      *
      * @return Response
@@ -34,10 +43,10 @@ class ConferenceController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function index(Environment $twig, ConferenceRepository $conferenceRepository): Response
+    public function index(ConferenceRepository $conferenceRepository): Response
     {
         return new Response(
-            $twig->render(
+            $this->twig->render(
                 'conference/index.html.twig',
                 ['conferences' => $conferenceRepository->findAll()]
             )
@@ -49,13 +58,17 @@ class ConferenceController extends AbstractController
      * @Route("/conference/{id}", name="conference")
      *
      *
-     * @throws SyntaxError
-     * @throws RuntimeError
+     * @param Request           $request
+     * @param Conference        $conference
+     * @param CommentRepository $commentRepository
+     *
+     * @return Response
      * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function show(
         Request $request,
-        Environment $twig,
         Conference $conference,
         CommentRepository $commentRepository
     ): Response {
@@ -63,7 +76,7 @@ class ConferenceController extends AbstractController
         $paginator = $commentRepository->getCommentPaginator($conference, $offset);
 
         return new Response(
-            $twig->render(
+            $this->twig->render(
                 'conference/show.html.twig',
                 [
                     'conference' => $conference,
