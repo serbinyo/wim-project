@@ -43,9 +43,14 @@ class ConferenceController extends AbstractController
         );
     }
 
+
     /**
      * @Route("/conference/{id}", name="conference")
      *
+     *
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
      */
     public function show(
         Environment $twig,

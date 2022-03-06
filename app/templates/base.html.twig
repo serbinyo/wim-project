@@ -11,22 +11,29 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-<nav
-        class="navbar navbar-expand-lg navbar-light bg-light"
-        style="height: 70px;"
->
-    <a class="navbar-brand" href="#">Symfony</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
-    <ul class="nav navbar-nav navbar-right">
-        {% if app.user %}
-            <li><a class="nav-link" href="{{ path('list') }}">Список тест</a></li>
-            <li><a class="nav-link" href="{{ path('app_logout') }}">Выход</a></li>
-        {% else %}
-            <li><a class="nav-link" href="{{ path('app_login') }}">Войти</a></li>
-            <li><a class="nav-link" href="{{ path('app_registration') }}">Зарегистрироваться</a></li>
-        {% endif %}
+<header>
+    <nav
+            class="navbar navbar-expand-lg navbar-light bg-light"
+            style="height: 70px;"
+    >
+        <a class="navbar-brand" href="#">Symfony</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+        <ul class="nav navbar-nav navbar-right">
+            {% if app.user %}
+                <li><a class="nav-link" href="{{ path('list') }}">Список тест</a></li>
+                <li><a class="nav-link" href="{{ path('app_logout') }}">Выход</a></li>
+            {% else %}
+                <li><a class="nav-link" href="{{ path('app_login') }}">Войти</a></li>
+                <li><a class="nav-link" href="{{ path('app_registration') }}">Зарегистрироваться</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <ul>
+        {% for conference in conferences %}
+            <li><a href="{{ path('conference', { id: conference.id }) }}">{{ conference }}</a></li>
+        {% endfor %}
     </ul>
-</nav>
+</header>
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
 </body>
