@@ -29,8 +29,6 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function add(Comment $entity, bool $flush = true): void
     {
@@ -41,8 +39,6 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function remove(Comment $entity, bool $flush = true): void
     {

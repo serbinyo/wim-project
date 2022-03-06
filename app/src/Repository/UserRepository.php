@@ -25,8 +25,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function add(User $entity, bool $flush = true): void
     {
@@ -37,8 +35,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function remove(User $entity, bool $flush = true): void
     {

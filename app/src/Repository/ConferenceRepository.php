@@ -36,8 +36,6 @@ class ConferenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function add(Conference $entity, bool $flush = true): void
     {
@@ -48,8 +46,6 @@ class ConferenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function remove(Conference $entity, bool $flush = true): void
     {
