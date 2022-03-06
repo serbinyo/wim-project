@@ -6,6 +6,8 @@
     <h2>Конференция {{ conference }}</h2>
 
     {% if comments|length > 0 %}
+        <div>{{ comments|length }} комментариев.</div>
+
         {% for comment in comments %}
             {% if comment.photofilename %}
                 <img
@@ -22,6 +24,14 @@
 
             <p>{{ comment.text }}</p>
         {% endfor %}
+
+        {% if previous >= 0 %}
+            <a href="{{ path('conference', { id: conference.id, offset: previous }) }}">Previous</a>
+        {% endif %}
+        {% if next < comments|length %}
+            <a href="{{ path('conference', { id: conference.id, offset: next }) }}">Next</a>
+        {% endif %}
+
     {% else %}
         <div>Для конференции пока нет комментариев.</div>
     {% endif %}
