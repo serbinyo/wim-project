@@ -6,6 +6,8 @@
     <h2>Оставьте свой отзыв!</h2>
 
     {% for conference in conferences %}
-        <h4>{{ conference }}</h4>
+        <h4>
+            <li><a href="{{ path('conference', { slug: conference.slug }) }}">{{ conference }}</a></li>
+        </h4>
     {% endfor %}
 {% endblock %}

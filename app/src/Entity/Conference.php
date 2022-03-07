@@ -60,7 +60,7 @@ class Conference
     /**
      * @return mixed
      */
-    public function getSlug()
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -68,9 +68,11 @@ class Conference
     /**
      * @param mixed $slug
      */
-    public function setSlug($slug): void
+    public function setSlug($slug): self
     {
         $this->slug = $slug;
+
+        return $this;
     }
 
     public function getCity(): ?string
