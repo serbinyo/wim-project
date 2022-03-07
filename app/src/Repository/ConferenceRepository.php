@@ -25,7 +25,7 @@ class ConferenceRepository extends ServiceEntityRepository
      *
      * @psalm-return list<T> The entities.
      */
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy(
             [],
