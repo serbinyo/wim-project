@@ -7,6 +7,7 @@ use App\Entity\Conference;
 use App\Form\CommentFormType;
 use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,13 +25,15 @@ use Twig\Error\SyntaxError;
 class ConferenceController extends AbstractController
 {
     private Environment $twig;
+    private EntityManagerInterface $entityManager;
 
     /**
      * ConferenceController constructor.
      */
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, EntityManagerInterface $entityManager)
     {
         $this->twig = $twig;
+        $this->entityManager = $entityManager;
     }
 
 
@@ -74,12 +77,26 @@ class ConferenceController extends AbstractController
         Conference $conference,
         CommentRepository $commentRepository
     ): Response {
+        //Постраничная навигация
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $commentRepository->getCommentPaginator($conference, $offset);
 
+        //Создание формы
         $comment = new Comment();
         $form = $this->createForm(CommentFormType::class, $comment);
 
+        //Обработка формы
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setConference($conference);
+
+            $this->entityManager->persist($comment);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('conference', ['slug' => $conference->getSlug()]);
+        }
+
+        //Ответ пользовательского представления
         return new Response(
             $this->twig->render(
                 'conference/show.html.twig',
