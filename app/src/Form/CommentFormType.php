@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
+use Gregwar\CaptchaBundle\Type\CaptchaType;
 
 /**
  * Class CommentFormType
@@ -21,9 +22,13 @@ class CommentFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('author', null, [
-                'label' => 'Ваше имя:',
-            ])
+            ->add(
+                'author',
+                null,
+                [
+                    'label' => 'Ваше имя:',
+                ]
+            )
             ->add('text')
             ->add('email', EmailType::class)
             ->add(
@@ -35,6 +40,17 @@ class CommentFormType extends AbstractType
                     'constraints' => [
                         new Image(['maxSize' => '1024k'])
                     ],
+                ]
+            )
+            ->add(
+                'captcha',
+                CaptchaType::class,
+                [
+                    'width'  => 200,
+                    'height' => 50,
+                    'length' => 6,
+                    'as_url' => true,
+                    'reload' => true
                 ]
             )
             ->add('submit', SubmitType::class);
