@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link
             rel="stylesheet"
@@ -11,24 +11,30 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-<nav
-        class="navbar navbar-expand-lg navbar-light bg-light"
-        style="height: 70px;"
->
-    <a class="navbar-brand" href="#">Symfony</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
-    <ul class="nav navbar-nav navbar-right">
-        {% if app.user %}
-            <li><a class="nav-link" href="{{ path('list') }}">View List</a></li>
-            <li><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
-        {% else %}
-            <li><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
-            <li>
-                <a class="nav-link" href="{{ path('app_registration') }}">Register</a>
-            </li>
-        {% endif %}
+<header>
+    <nav
+            class="navbar navbar-expand-lg navbar-light bg-light"
+            style="height: 70px;"
+    >
+        <a class="navbar-brand" href="#">Symfony</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+        <ul class="nav navbar-nav navbar-right">
+            {% if app.user %}
+                <li><a class="nav-link" href="{{ path('list') }}">Список тест</a></li>
+                <li><a class="nav-link" href="{{ path('app_logout') }}">Выход</a></li>
+            {% else %}
+                <li><a class="nav-link" href="{{ path('app_login') }}">Войти</a></li>
+                <li><a class="nav-link" href="{{ path('app_registration') }}">Зарегистрироваться</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <ul>
+        {% for conference in conferences %}
+            <li><a href="{{ path('conference', { slug: conference.slug }) }}">{{ conference }}</a></li>
+        {% endfor %}
     </ul>
-</nav>
-{% block body %}{% endblock %} {% block javascripts %}{% endblock %}
+</header>
+{% block body %}{% endblock %}
+{% block javascripts %}{% endblock %}
 </body>
 </html>

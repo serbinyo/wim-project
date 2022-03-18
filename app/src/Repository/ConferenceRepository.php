@@ -11,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Conference|null find($id, $lockMode = null, $lockVersion = null)
  * @method Conference|null findOneBy(array $criteria, array $orderBy = null)
- * @method Conference[]    findAll()
  * @method Conference[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ConferenceRepository extends ServiceEntityRepository
@@ -22,8 +21,21 @@ class ConferenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * Finds all entities in the repository.
+     *
+     * @psalm-return list<T> The entities.
+     */
+    public function findAll(): array
+    {
+        return $this->findBy(
+            [],
+            [
+                'year' => 'DESC',
+                'city' => 'ASC'
+            ]);
+    }
+
+    /**
      */
     public function add(Conference $entity, bool $flush = true): void
     {
@@ -34,8 +46,6 @@ class ConferenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function remove(Conference $entity, bool $flush = true): void
     {
