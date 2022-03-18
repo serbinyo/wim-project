@@ -556,7 +556,28 @@
                                 </ul>
                             </li>
                         {% else %}
-                            <li><a class="nav-link" href="{{ path('app_login') }}">Войти</a></li>
+                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                                   data-bs-toggle="dropdown">
+                                    <div class="avatar avatar-offline">
+                                        <img src="/assets/img/avatars/7.png" alt class="w-px-40 h-auto rounded-circle"/>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('app_login') }}">
+                                            <i class="bx bx-log-in-circle me-2"></i>
+                                            <span class="align-middle">Войти</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('app_registration') }}">
+                                            <i class="bx bx-user-plus me-2"></i>
+                                            <span class="align-middle">Зарегистрироваться</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         {% endif %}
                         <!--/ User -->
                     </ul>
@@ -567,13 +588,9 @@
 
             <!-- Content wrapper -->
             <div class="content-wrapper">
-                <!-- Content -->
 
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    <!-- Layout Demo -->
-                    {% block body %}{% endblock %}
-                    <!--/ Layout Demo -->
-                </div>
+                <!-- Content -->
+                {% block body %}{% endblock %}
                 <!-- / Content -->
 
                 <!-- Footer -->
