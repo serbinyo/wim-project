@@ -3,11 +3,13 @@
 {% block title %}Conference Guestbook{% endblock %}
 
 {% block body %}
-    <h2>Оставьте свой отзыв!</h2>
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h2>Оставьте свой отзыв!</h2>
 
-    {% for conference in conferences %}
-        <h4>
-            <li><a href="{{ path('conference', { slug: conference.slug }) }}">{{ conference }}</a></li>
-        </h4>
-    {% endfor %}
+        {% for conference in conferences %}
+            <h4>
+                <li><a href="{{ path('conference', { slug: conference.slug }) }}">{{ conference }}</a></li>
+            </h4>
+        {% endfor %}
+    </div>
 {% endblock %}
