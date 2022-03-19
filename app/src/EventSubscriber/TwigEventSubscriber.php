@@ -60,8 +60,11 @@ class TwigEventSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
+        /**
+         * Когда срабатывает контроллер ядра, выполнить функцию onKernelController
+        */
         return [
-            'kernel.controller' => 'onKernelController',
+            //'kernel.controller' => 'onKernelController',
         ];
     }
 }
