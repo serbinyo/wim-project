@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\User;
@@ -20,19 +22,28 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class)
-            ->add('name', TextType::class)
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => 'Confirm Password']
-            ])
-        ;
+            ->add(
+                'name',
+                TextType::class,
+                ['label' => 'Имя пользователя']
+            )
+            ->add(
+                'password',
+                RepeatedType::class,
+                [
+                    'type'           => PasswordType::class,
+                    'first_options'  => ['label' => 'Пароль'],
+                    'second_options' => ['label' => 'Подтверждение пароля']
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => User::class,
+            ]
+        );
     }
 }
