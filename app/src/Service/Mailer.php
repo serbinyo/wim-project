@@ -65,4 +65,33 @@ class Mailer
 
         $this->mailer->send($email);
     }
+
+
+    /**
+     * @param User $user
+     *
+     * @throws TransportExceptionInterface
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function sendConfirmationMessage(User $user)
+    {
+        $messageBody = $this->twig->render('security/confirmation.html.twig', [
+            'user' => $user
+        ]);
+
+        $email = (new Email())
+            ->from(self::FROM_ADDRESS)
+            ->to($user->getEmail())
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            ->priority(Email::PRIORITY_HIGH)
+            ->subject('Вы успешно прошли регистрацию!')
+            ->text('Вы получили это письмо для подтверждения регистрации')
+            ->html($messageBody);
+
+        $this->mailer->send($email);
+    }
 }
