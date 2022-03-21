@@ -8,19 +8,32 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 /**
  *
  */
 class IndexController extends AbstractController
 {
+    private Environment $twig;
+
     /**
+     * ConferenceController constructor.
+     */
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
+    /**
+     * @Route("/", name="homepage")
+     *
      * @throws Exception
      */
     public function index()
     {
         return new Response(
-            '<html><body>Hello world.</body></html>'
+            $this->twig->render('homepage/index.html.twig')
         );
     }
 }
