@@ -20,6 +20,12 @@
                                 <a href="{{ path('app_logout') }}">выйти</a>
                             </div>
                         {% else %}
+                            {% if error %}
+                                {# Показать сообщение при ошибочном входе #}
+                                <div class="alert alert-danger">
+                                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                                </div>
+                            {% endif %}
                             <!-- Login form -->
 
                             <!-- Logo -->
@@ -88,8 +94,6 @@
 
                             <h4 class="mb-2">Привет, дружище! 👋</h4>
                             <p class="mb-4">Пожалуйста залогинься и начни своё приключение</p>
-
-                            {# TODO Показать сообщение при ошибочном входе #}
 
                             <form id="formAuthentication" class="mb-3" role="form" method="POST">
                                 <div class="mb-3">
