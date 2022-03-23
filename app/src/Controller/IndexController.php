@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Controller;
 
-use Exception;
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,12 +16,48 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @Route("/", name="homepage")
+     *
      */
     public function index()
     {
-        return new Response(
-            '<html><body>Hello world.</body></html>'
-        );
+        if ($this->getUser()) {
+            $username = $this->getUser()->getUserIdentifier();
+            $token = (new Builder())
+                ->withClaim('mercure', ['subscribe' => [sprintf("/%s", $username)]])
+                ->getToken(
+                    new Sha256(),
+                    new Key($this->getParameter('mercure_secret_key'))
+                )
+            ;
+
+            $response =  $this->render('index/index.html.twig', [
+                'controller_name' => 'IndexController',
+            ]);
+
+            $response->headers->setCookie(
+                new Cookie(
+                    'mercureAuthorization',
+                    $token,
+                    (new \DateTime())
+                        ->add(new \DateInterval('PT2H')),
+                    '/.well-known/mercure',
+                    null,
+                    false,
+                    true,
+                    false,
+                    'strict'
+                )
+            );
+
+
+        } else {
+            $response =  $this->render('index/index.html.twig', [
+                'controller_name' => 'IndexController',
+            ]);
+        }
+
+
+        return $response;
     }
 }
