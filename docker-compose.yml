@@ -56,8 +56,8 @@ services:
         cors_origins http://127.0.0.1:8081
     container_name: ${PROJECT_NAME}-mercure
     ports:
-      - "9090:80"
-      # - "9091:443"
+      - "9000:80"
+      # - "9001:443"
     networks:
       - symfony
     # Comment the following line to disable the development mode
