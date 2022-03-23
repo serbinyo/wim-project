@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\PublisherInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Annotation\Route;
@@ -112,7 +113,7 @@ class MessageController extends AbstractController
     public function newMessage(Request $request, Conversation $conversation, SerializerInterface $serializer)
     {
         $user = $this->getUser();
-        //$user = $this->userRepository->find(1); //todo убрать
+        $user = $this->userRepository->find(1); //todo убрать
 
         /** @var Participant $recipient*/
         $recipient = $this->participantRepository->findParticipantByConverstionIdAndUserId(
@@ -124,11 +125,12 @@ class MessageController extends AbstractController
         $message = new Message();
         $message->setContent($content);
 
-        //$user = $this->userRepository->find(4); //todo убрать
+
+        $user = $this->userRepository->find(4); //todo убрать
         $message->setUser($user);
 
-        $conversation->addMessage($message);
-        $conversation->setLastMessage($message);
+//        $conversation->addMessage($message); // TODO открыть
+//        $conversation->setLastMessage($message);
 
         $this->entityManager->getConnection()->beginTransaction();
         try {
@@ -144,6 +146,7 @@ class MessageController extends AbstractController
         $messageSerialized = $serializer->serialize($message, 'json', [
             'attributes' => ['id', 'content', 'createdAt', 'mine', 'conversation' => ['id']]
         ]);
+
         $update = new Update(
             [
                 sprintf("/conversations/%s", $conversation->getId()),
