@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+    {{ encore_entry_link_tags('app') }}
+    <div class="container">
+        {% if app.user %}
+            <div id="app" data-username="{{ app.user.username }}"></div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
