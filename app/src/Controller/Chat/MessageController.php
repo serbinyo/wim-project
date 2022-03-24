@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\PublisherInterface;
+use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -45,22 +45,22 @@ class MessageController extends AbstractController
      */
     private $participantRepository;
     /**
-     * @var PublisherInterface
+     * @var HubInterface
      */
-    private $publisher;
+    private $hub;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         MessageRepository $messageRepository,
         UserRepository $userRepository,
         ParticipantRepository $participantRepository,
-        PublisherInterface $publisher
+        HubInterface $hub
     ) {
         $this->entityManager = $entityManager;
         $this->messageRepository = $messageRepository;
         $this->userRepository = $userRepository;
         $this->participantRepository = $participantRepository;
-        $this->publisher = $publisher;
+        $this->hub = $hub;
     }
 
     /**
@@ -112,6 +112,7 @@ class MessageController extends AbstractController
     {
         $user = $this->getUser();
 
+        /** @var Participant $recipient */
         $recipient = $this->participantRepository->findParticipantByConverstionIdAndUserId(
             $conversation->getId(),
             $user->getId()
@@ -142,15 +143,12 @@ class MessageController extends AbstractController
         $update = new Update(
             [
                 sprintf("/conversations/%s", $conversation->getId()),
-                sprintf("/conversations/%s", $recipient->getUser()->getUsername()),
+                sprintf("/conversations/%s", $recipient->getUser()->getUserIdentifier()),
             ],
-            $messageSerialized,
-            [
-                sprintf("/%s", $recipient->getUser()->getUsername())
-            ]
+            $messageSerialized
         );
 
-        $this->publisher->__invoke($update);
+        $this->hub->publish($update);
 
         $message->setMine(true);
         return $this->json($message, Response::HTTP_CREATED, [], [
