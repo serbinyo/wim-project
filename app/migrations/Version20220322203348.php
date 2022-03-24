@@ -29,7 +29,6 @@ final class Version20220322203348 extends AbstractMigration
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307F9AC0396 FOREIGN KEY (conversation_id) REFERENCES conversation (id)');
         $this->addSql('ALTER TABLE participant ADD CONSTRAINT FK_D79F6B11A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE participant ADD CONSTRAINT FK_D79F6B119AC0396 FOREIGN KEY (conversation_id) REFERENCES conversation (id)');
-        $this->addSql('ALTER TABLE comment CHANGE state state VARCHAR(255) DEFAULT \'submitted\' NOT NULL');
     }
 
     public function down(Schema $schema): void
@@ -42,8 +41,5 @@ final class Version20220322203348 extends AbstractMigration
         $this->addSql('DROP TABLE message');
         $this->addSql('DROP TABLE participant');
         $this->addSql('DROP TABLE messenger_messages');
-        $this->addSql('ALTER TABLE comment CHANGE author author VARCHAR(255) NOT NULL COLLATE `utf8_unicode_ci`, CHANGE text text LONGTEXT NOT NULL COLLATE `utf8_unicode_ci`, CHANGE email email VARCHAR(255) NOT NULL COLLATE `utf8_unicode_ci`, CHANGE photo_filename photo_filename VARCHAR(255) DEFAULT NULL COLLATE `utf8_unicode_ci`, CHANGE state state VARCHAR(255) NOT NULL COLLATE `utf8_unicode_ci`');
-        $this->addSql('ALTER TABLE conference CHANGE city city VARCHAR(255) NOT NULL COLLATE `utf8_unicode_ci`, CHANGE slug slug VARCHAR(255) NOT NULL COLLATE `utf8_unicode_ci`, CHANGE year year VARCHAR(4) NOT NULL COLLATE `utf8_unicode_ci`');
-        $this->addSql('ALTER TABLE user CHANGE email email VARCHAR(180) NOT NULL COLLATE `utf8_unicode_ci`, CHANGE password password VARCHAR(255) NOT NULL COLLATE `utf8_unicode_ci`, CHANGE name name VARCHAR(255) NOT NULL COLLATE `utf8_unicode_ci`, CHANGE confirmation_code confirmation_code VARCHAR(255) DEFAULT NULL COLLATE `utf8_unicode_ci`');
     }
 }
