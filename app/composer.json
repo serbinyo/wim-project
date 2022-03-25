@@ -15,7 +15,7 @@
     "doctrine/orm": "^2.11",
     "easycorp/easyadmin-bundle": "^3",
     "gregwar/captcha-bundle": "^2.2",
-    "lcobucci/jwt": "^3.3",
+    "lcobucci/jwt": "^4.1",
     "phpdocumentor/reflection-docblock": "^5.3",
     "phpstan/phpdoc-parser": "^1.2",
     "sensio/framework-extra-bundle": "^6.1",
@@ -74,10 +74,7 @@
     "preferred-install"  : {
       "*": "dist"
     },
-    "sort-packages"      : true,
-    "platform": {
-      "php": "7.4.999"
-    }
+    "sort-packages"      : true
   },
   "autoload"         : {
     "psr-4": {
