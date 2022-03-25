@@ -53,7 +53,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: 'konshensx'
       # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
       MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins http://127.0.0.1:8081
+        cors_origins http://127.0.0.1:8081 http://host.docker.internal:8081
     container_name: ${PROJECT_NAME}-mercure
     ports:
       - "9000:80"
