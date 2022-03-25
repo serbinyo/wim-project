@@ -76,7 +76,7 @@ class MessageController extends AbstractController
     {
         // can i view the conversation
 
-        //$this->denyAccessUnlessGranted('view', $conversation);
+        $this->denyAccessUnlessGranted('view', $conversation);
 
         $messages = $this->messageRepository->findMessageByConversationId(
             $conversation->getId()
