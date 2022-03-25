@@ -145,7 +145,8 @@ class MessageController extends AbstractController
                 sprintf("/conversations/%s", $conversation->getId()),
                 sprintf("/conversations/%s", $recipient->getUser()->getUserIdentifier()),
             ],
-            $messageSerialized
+            $messageSerialized,
+            true
         );
 
         $this->hub->publish($update);
