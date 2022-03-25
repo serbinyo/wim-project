@@ -21,7 +21,7 @@
         }),
         components: {Message, Input},
         computed: {
-            ...mapGetters(["HUBURL"]),
+            ...mapGetters(["HUBURL", "USERNAME"]),
             MESSAGES() {
                 return this.$store.getters.MESSAGES(this.$route.params.id);
             }
@@ -42,9 +42,10 @@
             this.$store.dispatch("GET_MESSAGES", this.$route.params.id)
                 .then(() => {
                     this.scrollDown();
-                    if (this.eventSource === null) {
+                    if (null === this.eventSource) {
                         let url = new URL(this.HUBURL);
-                        url.searchParams.append('topic', `/conversations/${this.$route.params.id}`)
+                        //url.searchParams.append('topic', `/conversations/${this.$route.params.id}`) Было у автора, но задваивались сообщения в правой стороне
+                        url.searchParams.append('topic', `/conversations/${this.USERNAME}`)
                         this.eventSource = new EventSource(url, {
                             withCredentials: true
                         })
