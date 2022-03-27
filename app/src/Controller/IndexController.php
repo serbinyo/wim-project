@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,13 +29,10 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name="homepage")
      *
-     * @throws Exception
      */
     public function index(Request $request, Discovery $discovery, Authorization $authorization)
     {
         if ($this->getUser()) {
-
-            $username = $this->getUser()->getUserIdentifier();
 
             $discovery->addLink($request);
             $authorization->setCookie($request, [
