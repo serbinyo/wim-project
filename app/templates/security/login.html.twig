@@ -16,7 +16,7 @@
                         {% if app.user %}
                             <div class="mb-3">
                                 Вы вошли как {{ app.user.username }}, вы можете перейти на
-                                <a href="{{ path('app_logout') }}">главную</a> или
+                                <a href="{{ path('homepage') }}">главную</a> или
                                 <a href="{{ path('app_logout') }}">выйти</a>
                             </div>
                         {% else %}
@@ -106,6 +106,7 @@
                                 <div class="mb-3 form-password-toggle">
                                     <div class="d-flex justify-content-between">
                                         <label class="form-label" for="password">Пароль</label>
+                                        {# TODO Восстановление пароля #}
                                         <a href="auth-forgot-password-basic">
                                             <small>Забыл пароль?</small>
                                         </a>
