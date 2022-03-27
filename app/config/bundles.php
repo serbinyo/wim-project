@@ -16,4 +16,6 @@ return [
     Gregwar\CaptchaBundle\GregwarCaptchaBundle::class => ['all' => true],
     DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
     SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
+    Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
+    Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
 ];

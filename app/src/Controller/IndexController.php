@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Controller;
 
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mercure\Authorization;
+use Symfony\Component\Mercure\Discovery;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
@@ -30,10 +29,29 @@ class IndexController extends AbstractController
      *
      * @throws Exception
      */
-    public function index()
+    public function index(Request $request, Discovery $discovery, Authorization $authorization)
     {
-        return new Response(
-            $this->twig->render('homepage/index.html.twig')
-        );
+        if ($this->getUser()) {
+
+            $username = $this->getUser()->getUserIdentifier();
+
+            $discovery->addLink($request);
+            $authorization->setCookie($request, [
+                '*'
+            ]);
+
+
+            $response =  $this->render('index/index.html.twig', [
+                'controller_name' => 'IndexController',
+            ]);
+
+
+        } else {
+            $response =  $this->render('index/index.html.twig', [
+                'controller_name' => 'IndexController',
+            ]);
+        }
+
+        return $response;
     }
 }
