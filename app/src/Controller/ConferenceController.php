@@ -43,7 +43,7 @@ class ConferenceController extends AbstractController
 
 
     /**
-     * @Route("/conference", name="conference")
+     * @Route("/conference", name="conference-list")
      *
      *
      * @param ConferenceRepository $conferenceRepository

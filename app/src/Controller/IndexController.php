@@ -7,15 +7,27 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mercure\Authorization;
 use Symfony\Component\Mercure\Discovery;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 /**
  *
  */
 class IndexController extends AbstractController
 {
+    private Environment $twig;
+
+    /**
+     * ConferenceController constructor.
+     */
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
     /**
      * @Route("/", name="homepage")
      *
+     * @throws Exception
      */
     public function index(Request $request, Discovery $discovery, Authorization $authorization)
     {
@@ -39,7 +51,6 @@ class IndexController extends AbstractController
                 'controller_name' => 'IndexController',
             ]);
         }
-
 
         return $response;
     }

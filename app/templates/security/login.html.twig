@@ -20,6 +20,12 @@
                                 <a href="{{ path('app_logout') }}">выйти</a>
                             </div>
                         {% else %}
+                            {% if error %}
+                                {# Показать сообщение при ошибочном входе #}
+                                <div class="alert alert-danger">
+                                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                                </div>
+                            {% endif %}
                             <!-- Login form -->
 
                             <!-- Logo -->
@@ -106,8 +112,7 @@
                                 <div class="mb-3 form-password-toggle">
                                     <div class="d-flex justify-content-between">
                                         <label class="form-label" for="password">Пароль</label>
-                                        {# TODO Восстановление пароля #}
-                                        <a href="auth-forgot-password-basic">
+                                        <a href="{{ path('app_forgot_password_request') }}">
                                             <small>Забыл пароль?</small>
                                         </a>
                                     </div>
