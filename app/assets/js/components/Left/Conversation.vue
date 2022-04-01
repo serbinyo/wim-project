@@ -4,7 +4,7 @@
             <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
             <div class="media-body ml-4">
                 <div class="d-flex align-items-center justify-content-between mb-1">
-                    <h6 class="mb-0">{{ conversation.username }}</h6><small class="small font-weight-bold">{{ date }}</small>
+                    <h6 class="mb-0">{{ conversation.name }}</h6><small class="small font-weight-bold">{{ date }}</small>
                 </div>
                 <p class="font-italic mb-0 text-small">{{ conversation.content }}</p>
             </div>
