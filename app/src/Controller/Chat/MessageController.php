@@ -26,7 +26,7 @@ class MessageController extends AbstractController
     /**
      *
      */
-    public const ATTRIBUTES_TO_SERIALIZE = ['id', 'content', 'createdAt', 'mine'];
+    public const ATTRIBUTES_TO_SERIALIZE = ['id', 'content', 'createdAt', 'mine', 'user' => ['name']];
 
     /**
      * @var EntityManagerInterface
@@ -137,9 +137,11 @@ class MessageController extends AbstractController
             throw $e;
         }
         $message->setMine(false);
+
         $messageSerialized = $serializer->serialize($message, 'json', [
             'attributes' => ['id', 'content', 'createdAt', 'mine', 'conversation' => ['id']]
         ]);
+
         $update = new Update(
             [
                 sprintf("/conversations/%s", $conversation->getId()),

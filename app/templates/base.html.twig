@@ -15,7 +15,7 @@
             content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>{% block title %} Дыши со мной {% endblock %}</title>
+    <title>{% block title %} serbin {% endblock %}</title>
 
     <meta name="description" content=""/>
 
@@ -604,10 +604,10 @@
                             <script>
                                 document.write(new Date().getFullYear());
                             </script>
-                            , сделано с ❤️разработал
+                            {# , сделано с ❤️разработал
                             <a href="https://www.instagram.com/a_serba_28" target="_blank" class="footer-link fw-bolder">SerbinAlex</a>,
                             дизайн
-                            <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>,
+                            <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>, #}
                         </div>
 
                     </div>
@@ -628,10 +628,10 @@
 
 <div class="buy-now">
     <a
-            href="#"
+            href="{{ path('app_login') }}"
             target="_blank"
             class="btn btn-danger btn-buy-now"
-    >Дыши со мной</a
+    >Вход</a
     >
 </div>
 

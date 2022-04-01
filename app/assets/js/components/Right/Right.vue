@@ -45,10 +45,10 @@
                     if (null === this.eventSource) {
                         let url = new URL(this.HUBURL);
                         //url.searchParams.append('topic', `/conversations/${this.$route.params.id}`) Было у автора, но задваивались сообщения в правой стороне
-                        url.searchParams.append('topic', `/conversations/${this.USERNAME}`)
+                        url.searchParams.append('topic', `/conversations/${this.USERNAME}`);
                         this.eventSource = new EventSource(url, {
                             withCredentials: true
-                        })
+                        });
 
                         this.eventSource.onmessage = function (event) {
                             vm.addMessage(JSON.parse(event.data))

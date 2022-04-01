@@ -4,6 +4,7 @@ namespace App\Repository\Chat;
 
 use App\Entity\Chat\Conversation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -74,19 +75,23 @@ class ConversationRepository extends ServiceEntityRepository
                 )
             )
             ->setParameters([
-                'me' => $myId,
-                'otherUser' => $otherUserId
-            ])
-        ;
+                                'me'        => $myId,
+                                'otherUser' => $otherUserId
+                            ]);
 
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param int $userId
+     *
+     * @return int|mixed|string
+     */
     public function findConversationsByUser(int $userId)
     {
         $qb = $this->createQueryBuilder('c');
         $qb->
-            select('otherUser.email', 'c.id as conversationId', 'lm.content', 'lm.createdAt')
+        select('otherUser.email', 'otherUser.name', 'c.id as conversationId', 'lm.content', 'lm.createdAt')
             ->innerJoin('c.participants', 'p', Join::WITH, $qb->expr()->neq('p.user', ':user'))
             ->innerJoin('c.participants', 'me', Join::WITH, $qb->expr()->eq('me.user', ':user'))
             ->leftJoin('c.lastMessage', 'lm')
@@ -94,12 +99,14 @@ class ConversationRepository extends ServiceEntityRepository
             ->innerJoin('p.user', 'otherUser')
             ->where('meUser.id = :user')
             ->setParameter('user', $userId)
-            ->orderBy('lm.createdAt', 'DESC')
-        ;
-        
+            ->orderBy('lm.createdAt', 'DESC');
+
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function checkIfUserisParticipant(int $conversationId, int $userId)
     {
         $qb = $this->createQueryBuilder('c');
@@ -110,10 +117,9 @@ class ConversationRepository extends ServiceEntityRepository
                 $qb->expr()->eq('p.user', ':userId')
             )
             ->setParameters([
-                'conversationId' => $conversationId,
-                'userId' => $userId
-            ])
-        ;
+                                'conversationId' => $conversationId,
+                                'userId'         => $userId
+                            ]);
 
         return $qb->getQuery()->getOneOrNullResult();
     }

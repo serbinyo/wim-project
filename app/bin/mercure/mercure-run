@@ -1,3 +1,3 @@
 #!/bin/bash
 # This is a comment
-MERCURE_PUBLISHER_JWT_KEY='serbinyo' MERCURE_SUBSCRIBER_JWT_KEY='serbinyo' MERCURE_EXTRA_DIRECTIVES='cors_origins http://45.10.245.119:80 http://127.0.0.1:80' ./bin/mercure/mercure run
+MERCURE_PUBLISHER_JWT_KEY='serbinyo' MERCURE_SUBSCRIBER_JWT_KEY='serbinyo' ./bin/mercure/mercure run -config ./bin/mercure/Caddyfile
