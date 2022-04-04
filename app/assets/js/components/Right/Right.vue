@@ -23,7 +23,7 @@
         </div>
 
 
-        <Input v-if="0 < MESSAGES.length" />
+        <Input v-if="MESSAGES" />
     </div>
 </template>
 
