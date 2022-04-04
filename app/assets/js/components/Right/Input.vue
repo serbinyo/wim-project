@@ -1,18 +1,21 @@
 <template>
     <!-- Typing area -->
-    <form class="bg-light">
-        <div class="input-group">
-            <input type="text" placeholder="Напишите сообщение" id="chat-input"
-                   v-model="content"
-                   @keydown.enter.prevent
-                   @keyup.enter.prevent="sendMessage"
-                   aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light">
-            <div class="input-group-append">
-                <button id="button-addon2" type="submit"
-                        class="btn btn-link"> <i @click.prevent="sendMessage" class="fa fa-paper-plane"></i></button>
+    <div class="row">
+        <div class="col-12">
+            <div class="chat-box-tray">
+                <i class="material-icons">sentiment_very_satisfied</i>
+                <input type="text" placeholder="Напишите сообщение" id="chat-input"
+                       v-model="content"
+                       @keydown.enter.prevent
+                       @keyup.enter.prevent="sendMessage"
+                       aria-describedby="button-addon2">
+                <!--                <i class="material-icons">mic</i>-->
+                <button id="button-addon2" type="submit" @click.prevent="sendMessage"
+                        class="btn btn-link"> <i class="material-icons">send</i></button>
+
             </div>
         </div>
-    </form>
+    </div>
 </template>
 
 <script>
