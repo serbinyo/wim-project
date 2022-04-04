@@ -3,7 +3,9 @@
     <div class="row">
         <div class="col-12">
             <div class="chat-box-tray">
-                <i class="material-icons">sentiment_very_satisfied</i>
+                <!--
+                todo приделать выбор смайликов
+                <i class="material-icons">sentiment_very_satisfied</i>-->
                 <input type="text" placeholder="Напишите сообщение" id="chat-input"
                        v-model="content"
                        @keydown.enter.prevent
