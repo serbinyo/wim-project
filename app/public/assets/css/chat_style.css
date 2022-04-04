@@ -145,6 +145,10 @@ hr {
     background: #74b9ff;
     color: #fff;
 }
+
+.chat-panel {
+    overflow-y: auto; height: 500px; overflow-x: hidden;
+}
 .chat-box-tray {
     background: #eee;
     display: flex;

@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-8">
+    <div class="col-md-8 chat-panel" ref="messagesBody">
         <!--
         todo подумать над шапкой окна с сообщениями
         <div class="settings-tray">
@@ -16,7 +16,7 @@
 			</span>
             </div>
         </div>-->
-        <div class="chat-panel" ref="messagesBody">
+        <div>
             <template v-for="(message, index, key) in MESSAGES">
                 <Message :message="message"/>
             </template>
