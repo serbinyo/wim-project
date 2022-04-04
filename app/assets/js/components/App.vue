@@ -1,11 +1,11 @@
 <template>
-    <div class="container py-5 px-4">
-       <div class="row rounded-lg overflow-hidden shadow">
+    <div class="row no-gutters">
+
             <!-- Users box-->
            <Left />
             <!-- Chat Box-->
            <router-view :key="$route.fullPath"></router-view>
-        </div>
+
     </div>
 
 </template>

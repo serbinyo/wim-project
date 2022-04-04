@@ -1,14 +1,12 @@
 <template>
-    <router-link :to="{name: 'conversation', params: {id: conversation.conversationId}}" class="list-group-item list-group-item-action rounded-0">
-        <div class="media">
-            <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-            <div class="media-body ml-4">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <h6 class="mb-0">{{ conversation.name }}</h6><small class="small font-weight-bold">{{ date }}</small>
-                </div>
-                <p class="font-italic mb-0 text-small">{{ conversation.content }}</p>
+    <router-link :to="{name: 'conversation', params: {id: conversation.conversationId}}" class="friend-drawer friend-drawer--onhover">
+            <img class="profile-image"
+                 src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="">
+            <div class="text">
+                <h6>{{ conversation.name }}</h6>
+                <p class="text-muted">{{ conversation.content }}</p>
             </div>
-        </div>
+            <span class="time text-muted small">{{ date }}</span>
     </router-link>
 </template>
 
