@@ -46,6 +46,7 @@
         methods: {
             scrollDown() {
                 this.$refs.messagesBody.scrollTop = this.$refs.messagesBody.scrollHeight;
+                window.scrollTo(0, this.$refs.messagesBody.scrollHeight);
             },
             addMessage(data) {
                 this.$store.commit("ADD_MESSAGE", {
