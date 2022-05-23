@@ -132,13 +132,17 @@
                         <i class="menu-icon tf-icons bx bx-home-circle"></i>
                         <div data-i18n="Analytics">Главная</div>
                     </a>
+                    <a href="{{ path('wim') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-wind"></i>
+                        <div data-i18n="Analytics">Вим Хоф Метод</div>
+                    </a>
                 </li>
 
                 {% if app.user %}
                     <!-- Layouts -->
                     <li class="menu-item active">
                         <a href="{{ path('chat') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-layout"></i>
+                            <i class="menu-icon tf-icons bx bx-chat"></i>
                             <div data-i18n="Layouts">Мессенджер</div>
                         </a>
                     </li>
