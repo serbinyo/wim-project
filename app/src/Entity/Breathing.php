@@ -43,7 +43,7 @@ class Breathing
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Round::class, mappedBy="breath_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Round::class, mappedBy="breath", orphanRemoval=true)
      */
     private $rounds;
 

@@ -67,7 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $enabled;
 
     /**
-     * @ORM\OneToMany(targetEntity=Breathing::class, mappedBy="user_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Breathing::class, mappedBy="user", orphanRemoval=true)
      */
     private $breathings;
 
