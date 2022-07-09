@@ -78,6 +78,8 @@
                         allowfullscreen></iframe>
 
                 <div id="app"></div>
+                <div id="app2"></div>
+                <div id="app3"></div>
 
                 <button class="btn" onclick="drawTimer(document.getElementById('seconds').value)">Старт</button>
 
@@ -88,49 +90,198 @@
 {% endblock %}
 
 {% block javascripts %}
+{#    <script>#}
+{#        // Credit: Mateusz Rybczonec#}
+
+{#        let TIME_LIMIT = 5;#}
+{#        const FULL_DASH_ARRAY = 283;#}
+{#        const WARNING_THRESHOLD = TIME_LIMIT / 100 * 20;#}
+{#        const ALERT_THRESHOLD = TIME_LIMIT / 100 * 5;#}
+{#        const COLOR_CODES = {#}
+{#            info   : {#}
+{#                color: "green"#}
+{#            },#}
+{#            warning: {#}
+{#                color    : "orange",#}
+{#                threshold: WARNING_THRESHOLD#}
+{#            },#}
+{#            alert  : {#}
+{#                color    : "red",#}
+{#                threshold: ALERT_THRESHOLD#}
+{#            }#}
+{#        };#}
+
+{#        let timePassed = 0;#}
+{#        let timeLeft = TIME_LIMIT;#}
+{#        let timerInterval = null;#}
+{#        let remainingPathColor = COLOR_CODES.info.color;#}
+
+{#        drawTimer(10);#}
+
+{#        function drawTimer(time_limit) {#}
+{#            TIME_LIMIT = time_limit;#}
+{#            if (TIME_LIMIT == 0) return;#}
+
+{#            resetTimer();#}
+
+{#            document.getElementById("app").innerHTML = `#}
+{#                <div class="base-timer">#}
+{#                  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">#}
+{#                    <g class="base-timer__circle">#}
+{#                      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>#}
+{#                      <path#}
+{#                        id="base-timer-path-remaining"#}
+{#                        stroke-dasharray="283"#}
+{#                        class="base-timer__path-remaining ${remainingPathColor}"#}
+{#                        d="#}
+{#                          M 50, 50#}
+{#                          m -45, 0#}
+{#                          a 45,45 0 1,0 90,0#}
+{#                          a 45,45 0 1,0 -90,0#}
+{#                        "#}
+{#                      ></path>#}
+{#                    </g>#}
+{#                  </svg>#}
+{#                  <span id="base-timer-label" class="base-timer__label">${formatTime(#}
+{#                timeLeft#}
+{#            )}</span>#}
+{#                </div>#}
+{#                `;#}
+
+{#            runTimer();#}
+{#        }#}
+
+{#        function onTimesUp() {#}
+{#            clearInterval(timerInterval);#}
+{#            document.getElementById("app").innerHTML = '';#}
+{#        }#}
+
+{#        function resetTimer() {#}
+{#            timePassed = 0;#}
+{#            timeLeft = TIME_LIMIT;#}
+{#            timerInterval = null;#}
+{#            remainingPathColor = COLOR_CODES.info.color;#}
+{#        }#}
+
+
+{#        function runTimer() {#}
+{#            timerInterval = setInterval(() => {#}
+{#                timePassed = timePassed += 1;#}
+{#                timeLeft = TIME_LIMIT - timePassed;#}
+{#                document.getElementById("base-timer-label").innerHTML = formatTime(#}
+{#                    timeLeft#}
+{#                );#}
+{#                setCircleDasharray();#}
+{#                setRemainingPathColor(timeLeft);#}
+
+{#                if (timeLeft === 0) {#}
+{#                    onTimesUp();#}
+{#                }#}
+{#            }, 1000);#}
+
+{#            return true#}
+{#        }#}
+
+{#        function formatTime(time) {#}
+{#            const minutes = Math.floor(time / 60);#}
+{#            let seconds = time % 60;#}
+
+{#            if (seconds < 10) {#}
+{#                seconds = `0${seconds}`;#}
+{#            }#}
+
+{#            return `${minutes}:${seconds}`;#}
+{#        }#}
+
+{#        function setRemainingPathColor(timeLeft) {#}
+{#            const {alert, warning, info} = COLOR_CODES;#}
+{#            if (timeLeft <= alert.threshold) {#}
+{#                document#}
+{#                    .getElementById("base-timer-path-remaining")#}
+{#                    .classList.remove(warning.color);#}
+{#                document#}
+{#                    .getElementById("base-timer-path-remaining")#}
+{#                    .classList.add(alert.color);#}
+{#            } else if (timeLeft <= warning.threshold) {#}
+{#                document#}
+{#                    .getElementById("base-timer-path-remaining")#}
+{#                    .classList.remove(info.color);#}
+{#                document#}
+{#                    .getElementById("base-timer-path-remaining")#}
+{#                    .classList.add(warning.color);#}
+{#            }#}
+{#        }#}
+
+{#        function calculateTimeFraction() {#}
+{#            const rawTimeFraction = timeLeft / TIME_LIMIT;#}
+{#            return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);#}
+{#        }#}
+
+{#        function setCircleDasharray() {#}
+{#            const circleDasharray = `${(#}
+{#                calculateTimeFraction() * FULL_DASH_ARRAY#}
+{#            ).toFixed(0)} 283`;#}
+{#            document#}
+{#                .getElementById("base-timer-path-remaining")#}
+{#                .setAttribute("stroke-dasharray", circleDasharray);#}
+{#        }#}
+
+{#    </script>#}
+
     <script>
-        // Credit: Mateusz Rybczonec
+        class Timer {
 
-        let TIME_LIMIT = 5;
-        const FULL_DASH_ARRAY = 283;
-        const WARNING_THRESHOLD = TIME_LIMIT / 100 * 20;
-        const ALERT_THRESHOLD = TIME_LIMIT / 100 * 5;
-        const COLOR_CODES = {
-            info   : {
-                color: "green"
-            },
-            warning: {
-                color    : "orange",
-                threshold: WARNING_THRESHOLD
-            },
-            alert  : {
-                color    : "red",
-                threshold: ALERT_THRESHOLD
+            domElement;
+            TIME_LIMIT;
+            FULL_DASH_ARRAY;
+            WARNING_THRESHOLD;
+            ALERT_THRESHOLD;
+            COLOR_CODES;
+            timePassed;
+            timeLeft;
+            timerInterval;
+            remainingPathColor;
+
+            constructor(domElement, timeLimit) {
+                this.domElement = domElement;
+                this.TIME_LIMIT = timeLimit;
+                this.FULL_DASH_ARRAY = 283;
+                this.WARNING_THRESHOLD = this.TIME_LIMIT / 100 * 20;
+                this.ALERT_THRESHOLD = this.TIME_LIMIT / 100 * 5;
+                this.COLOR_CODES = {
+                    info   : {
+                        color: "green"
+                    },
+                    warning: {
+                        color    : "orange",
+                        threshold: this.WARNING_THRESHOLD
+                    },
+                    alert  : {
+                        color    : "red",
+                        threshold: this.ALERT_THRESHOLD
+                    }
+                };
+
+                this.timePassed = 0;
+                this.timeLeft = this.TIME_LIMIT;
+                this.timerInterval = null;
+                this.remainingPathColor = this.COLOR_CODES.info.color;
             }
-        };
 
-        let timePassed = 0;
-        let timeLeft = TIME_LIMIT;
-        let timerInterval = null;
-        let remainingPathColor = COLOR_CODES.info.color;
+            startTimer() {
+                if (this.TIME_LIMIT == 0) return;
 
-        drawTimer(10);
+                this.resetTimer();
 
-        function drawTimer(time_limit) {
-            TIME_LIMIT = time_limit;
-            if (TIME_LIMIT == 0) return;
-
-            resetTimer();
-
-            document.getElementById("app").innerHTML = `
+                document.getElementById(this.domElement).innerHTML = `
                 <div class="base-timer">
                   <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <g class="base-timer__circle">
                       <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
                       <path
-                        id="base-timer-path-remaining"
+                        id="base-timer-path-remaining-${this.domElement}"
                         stroke-dasharray="283"
-                        class="base-timer__path-remaining ${remainingPathColor}"
+                        class="base-timer__path-remaining ${this.remainingPathColor}"
                         d="
                           M 50, 50
                           m -45, 0
@@ -140,89 +291,96 @@
                       ></path>
                     </g>
                   </svg>
-                  <span id="base-timer-label" class="base-timer__label">${formatTime(
-                timeLeft
-            )}</span>
+                  <span id="base-timer-label-${this.domElement}" class="base-timer__label">${this.formatTime(
+                    this.timeLeft
+                )}</span>
                 </div>
                 `;
 
-            runTimer();
-        }
+                this.runTimer();
+            }
 
-        function onTimesUp() {
-            clearInterval(timerInterval);
-            document.getElementById("app").innerHTML = '';
-        }
+            onTimesUp() {
+                clearInterval(this.timerInterval);
+                document.getElementById(this.domElement).innerHTML = '';
+            }
 
-        function resetTimer() {
-            timePassed = 0;
-            timeLeft = TIME_LIMIT;
-            timerInterval = null;
-            remainingPathColor = COLOR_CODES.info.color;
-        }
+            resetTimer() {
+                this.timePassed = 0;
+                this.timeLeft = this.TIME_LIMIT;
+                this.timerInterval = null;
+                this.remainingPathColor = this.COLOR_CODES.info.color;
+            }
 
 
-        function runTimer() {
-            timerInterval = setInterval(() => {
-                timePassed = timePassed += 1;
-                timeLeft = TIME_LIMIT - timePassed;
-                document.getElementById("base-timer-label").innerHTML = formatTime(
-                    timeLeft
-                );
-                setCircleDasharray();
-                setRemainingPathColor(timeLeft);
+            runTimer() {
+                this.timerInterval = setInterval(() => {
+                    this.timePassed = this.timePassed += 1;
+                    this.timeLeft = this.TIME_LIMIT - this.timePassed;
+                    document.getElementById(`base-timer-label-${this.domElement}`).innerHTML = this.formatTime(
+                        this.timeLeft
+                    );
+                    this.setCircleDasharray();
+                    this.setRemainingPathColor(this.timeLeft);
 
-                if (timeLeft === 0) {
-                    onTimesUp();
+                    if (this.timeLeft === 0) {
+                        this.onTimesUp();
+                    }
+                }, 1000);
+
+                return true
+            }
+
+            formatTime(time) {
+                const minutes = Math.floor(time / 60);
+                let seconds = time % 60;
+
+                if (seconds < 10) {
+                    seconds = `0${seconds}`;
                 }
-            }, 1000);
 
-            return true
-        }
-
-        function formatTime(time) {
-            const minutes = Math.floor(time / 60);
-            let seconds = time % 60;
-
-            if (seconds < 10) {
-                seconds = `0${seconds}`;
+                return `${minutes}:${seconds}`;
             }
 
-            return `${minutes}:${seconds}`;
-        }
+            setRemainingPathColor(timeLeft) {
+                const {alert, warning, info} = this.COLOR_CODES;
+                if (timeLeft <= alert.threshold) {
+                    document
+                        .getElementById(`base-timer-path-remaining-${this.domElement}`)
+                        .classList.remove(warning.color);
+                    document
+                        .getElementById(`base-timer-path-remaining-${this.domElement}`)
+                        .classList.add(alert.color);
+                } else if (timeLeft <= warning.threshold) {
+                    document
+                        .getElementById(`base-timer-path-remaining-${this.domElement}`)
+                        .classList.remove(info.color);
+                    document
+                        .getElementById(`base-timer-path-remaining-${this.domElement}`)
+                        .classList.add(warning.color);
+                }
+            }
 
-        function setRemainingPathColor(timeLeft) {
-            const {alert, warning, info} = COLOR_CODES;
-            if (timeLeft <= alert.threshold) {
+            calculateTimeFraction() {
+                const rawTimeFraction = this.timeLeft / this.TIME_LIMIT;
+                return rawTimeFraction - (1 / this.TIME_LIMIT) * (1 - rawTimeFraction);
+            }
+
+            setCircleDasharray() {
+                const circleDasharray = `${(
+                    this.calculateTimeFraction() * this.FULL_DASH_ARRAY
+                ).toFixed(0)} 283`;
                 document
-                    .getElementById("base-timer-path-remaining")
-                    .classList.remove(warning.color);
-                document
-                    .getElementById("base-timer-path-remaining")
-                    .classList.add(alert.color);
-            } else if (timeLeft <= warning.threshold) {
-                document
-                    .getElementById("base-timer-path-remaining")
-                    .classList.remove(info.color);
-                document
-                    .getElementById("base-timer-path-remaining")
-                    .classList.add(warning.color);
+                    .getElementById(`base-timer-path-remaining-${this.domElement}`)
+                    .setAttribute(`stroke-dasharray-${this.domElement}`, circleDasharray);
             }
         }
 
-        function calculateTimeFraction() {
-            const rawTimeFraction = timeLeft / TIME_LIMIT;
-            return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
-        }
-
-        function setCircleDasharray() {
-            const circleDasharray = `${(
-                calculateTimeFraction() * FULL_DASH_ARRAY
-            ).toFixed(0)} 283`;
-            document
-                .getElementById("base-timer-path-remaining")
-                .setAttribute("stroke-dasharray", circleDasharray);
-        }
-
+        let timer = new Timer('app', 5);
+        let timer2 = new Timer('app2', 5);
+        let timer3 = new Timer('app3', 10);
+        timer.startTimer();
+        timer2.startTimer();
+        timer3.startTimer();
     </script>
 {% endblock %}
