@@ -29,6 +29,8 @@ class WimMainController extends AbstractController
      */
     public function index()
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $response =  $this->render('wim/index.html.twig');
 
         return $response;
