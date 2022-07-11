@@ -7,7 +7,7 @@ new Vue({
     render: h => h(App)
 }).$mount('#app');
 
-let timer1 = new Timer('timer1', 5);
-let timer2 = new Timer('timer2', 10);
-timer1.startTimer();
-timer2.startTimer();
+// let timer1 = new Timer('timer1', 5);
+// let timer2 = new Timer('timer2', 10);
+// timer1.startTimer();
+// timer2.startTimer();
