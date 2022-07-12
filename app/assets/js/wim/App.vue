@@ -11,6 +11,12 @@
 <!--                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
 <!--                allowfullscreen></iframe>-->
 
+        <div class="pano">
+            <div class="count">1</div>
+            <div class="circle">
+
+            </div>
+        </div>
     </div>
 
 </template>
