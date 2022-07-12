@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <lap-settings></lap-settings>
+        <lap-settings @start="start" :startExercise="start"></lap-settings>
 
 <!--        <div id="timer1"></div>-->
 <!--        <div id="timer2"></div>-->
@@ -21,5 +21,10 @@ export default {
     components: {LapSettings},
     data: () => ({
     }),
+    methods: {
+        start(data) {
+            console.log('app start', data)
+        },
+    }
 }
 </script>

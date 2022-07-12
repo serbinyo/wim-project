@@ -42,6 +42,9 @@ export default {
     setup () {
         return { v$: useVuelidate() }
     },
+    props: [
+        'startExercise'
+    ],
     data: () => ({
         laps       : [1, 2, 3],
         breaths    : [
@@ -77,7 +80,10 @@ export default {
                 return;
             }
 
-            console.log('Старт')
+            this.startExercise({
+                breaths : this.breaths,
+                waitingTime : this.waitingTime
+            })
         }
     }
 }
