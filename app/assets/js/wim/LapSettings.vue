@@ -36,9 +36,7 @@
 <script>
 
 import useVuelidate from '@vuelidate/core'
-import { helpers } from '@vuelidate/validators'
-
-const noEmptyElementsInArray = (array) => !array.includes('');
+import { helpers, noEmptyElementsInArray  } from '../classes/Vuelidate/Validators'
 
 export default {
     setup () {
