@@ -4,14 +4,14 @@
             <div class="col">Количество дыханий</div>
             <div class="col">Задержка дыхания, сек</div>
         </div>
-        <div class="row lap" v-for="(number, index) in laps">
+        <div class="row lap" v-for="(lap, index) in laps">
 
             <div class="col">
-                <input type="text" class="form-control" v-model="breaths[index]"
+                <input type="text" class="form-control" v-model="lap.breaths"
                        placeholder="Количество дыханий" aria-label="Количество дыханий">
             </div>
             <div class="col">
-                <input type="text" class="form-control" v-model="waitingTime[index]"
+                <input type="text" class="form-control" v-model="lap.waitingTime"
                        placeholder="Задержка дыхания, сек" aria-label="Задержка дыхания, сек">
             </div>
         </div>
@@ -36,7 +36,7 @@
 <script>
 
 import useVuelidate from '@vuelidate/core'
-import { helpers, noEmptyElementsInArray  } from '../classes/Vuelidate/Validators'
+import { helpers, noEmptyLapSettings  } from '../classes/Vuelidate/Validators'
 
 export default {
     setup () {
@@ -46,33 +46,34 @@ export default {
         'startExercise'
     ],
     data: () => ({
-        laps       : [1, 2, 3],
-        breaths    : [
-            30,
-            30,
-            30
+        laps    : [
+            {
+                breaths : 30,
+                waitingTime : 30
+            },
+            {
+                breaths : 30,
+                waitingTime : 60
+            },
+            {
+                breaths : 30,
+                waitingTime : 90
+            }
         ],
-        waitingTime: [
-            30,
-            60,
-            90
-        ]
     }),
     validations () {
         return {
-            breaths : {
-                noEmptyElementsInArray : helpers.withMessage('Заполните количество дыханий', noEmptyElementsInArray)
+            laps : {
+                noEmptyLapSettings : helpers.withMessage('Заполните настройки дыханий', noEmptyLapSettings)
             },
-            waitingTime : {
-                noEmptyElementsInArray : helpers.withMessage('Заполните время задержки дыхания', noEmptyElementsInArray)
-            }
         }
     },
     methods: {
         addLap() {
-            this.laps.push(this.laps.length + 1);
-            this.breaths.push('');
-            this.waitingTime.push('');
+            this.laps.push({
+                breaths : '',
+                waitingTime : ''
+            });
         },
         async start () {
             const isFormCorrect = await this.v$.$validate();
@@ -80,10 +81,7 @@ export default {
                 return;
             }
 
-            this.startExercise({
-                breaths : this.breaths,
-                waitingTime : this.waitingTime
-            })
+            this.startExercise(this.laps);
         }
     }
 }
