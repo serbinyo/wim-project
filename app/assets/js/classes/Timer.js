@@ -71,7 +71,7 @@ export class Timer {
 
     onTimesUp() {
         clearInterval(this.timerInterval);
-        //document.getElementById(this.domElement).innerHTML = '';
+        document.getElementById(this.domElement).innerHTML = '';
     }
 
     resetTimer() {
