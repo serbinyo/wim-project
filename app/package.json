@@ -6,7 +6,10 @@
         "vue": "^2.6.11",
         "vue-loader": "^15.9.2",
         "vue-template-compiler": "^2.6.11",
-        "webpack-notifier": "^1.6.0"
+        "webpack-notifier": "^1.6.0",
+        "@vuelidate/core": "^2.0.0-alpha.42",
+        "@vuelidate/validators": "^2.0.0-alpha.30",
+        "@vue/composition-api" : "^1.7.0"
     },
     "license": "UNLICENSED",
     "private": true,
