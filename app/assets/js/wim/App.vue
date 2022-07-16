@@ -16,6 +16,7 @@
 import LapSettings from "./LapSettings";
 import InhaleExhale from "./InhaleExhale";
 import {Timer} from "../classes/Timer"
+import NoSleep from 'nosleep.js';
 
 export default {
     components: {InhaleExhale, LapSettings},
@@ -27,14 +28,15 @@ export default {
                 waitingTime: 0
             }
         ],
-        currentLap : {
+        currentLap      : {
             breaths    : 0,
             waitingTime: 0
         },
         isBreathingPhase: true,
         flag            : false,
         domains         : ['localhost', 'wetGrundy.com', 'overflow.com'],
-        n               : 0
+        n               : 0,
+        noSleepLock : new NoSleep()
     }),
     methods   : {
         start(laps) {
@@ -44,11 +46,25 @@ export default {
             this.isSettings = false;
             this.isBreathingPhase = true;
 
+            this.noSleepStart();
+
             this.runLap(this.laps[this.n]);
         },
+        noSleepStart() {
+            let that = this;
+            // Enable wake lock.
+            // (must be wrapped in a user input event handler e.g. a mouse or touch handler)
+            document.addEventListener('click', function enableNoSleep() {
+                document.removeEventListener('click', enableNoSleep, false);
+                that.noSleepLock.enable();
+            }, false);
+        },
+        noSleepEnd() {
+            // Disable wake lock at some point in the future.
+            // (does not need to be wrapped in any user input event handler)
+            this.noSleepLock.disable();
+        },
         runLap(lap) {
-            console.log(lap)
-
             let that = this;
             that.currentLap = lap;
             that.needBreathingPhaseTimer = true;
@@ -103,6 +119,8 @@ export default {
             if (this.n < this.laps.length) {
                 this.isBreathingPhase = true;
                 this.runLap(this.laps[this.n]);
+            } else {
+                this.noSleepEnd()
             }
         },
     }
