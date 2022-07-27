@@ -1,15 +1,21 @@
 <template>
     <div id="inhale-exhale">
         <div class="pano">
-            <div class="count" id="haleCounter">{{breathCounter}}</div>
-            <div class="circle"></div>
+
+            <div class="circle">
+            <div class="count" id="haleCounter">{{breathCounter}}</div></div>
+
+<!--            <speech>Вдох-Выдох!</speach>-->
+
         </div>
     </div>
 </template>
 
 <script>
 
+import Speech from "./Simple/Speech";
 export default {
+    components: {Speech},
     data: () => ({
         breathCounter : 1,
         inhaleExhaleTime: 4500
@@ -23,7 +29,6 @@ export default {
     },
     mounted() {
         this.beginBreathing();
-        console.log('mounted')
     }
 }
 </script>
@@ -92,5 +97,26 @@ export default {
     }
 }
 /*endregion circle animation*/
+
+.speaker {
+    padding-top: 320px;
+}
+
+/* speech bubble */
+p.speech {
+    position: relative;
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    background-color: #fff;
+    border: 8px solid #666;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    -webkit-box-shadow: 2px 2px 4px #888;
+    -moz-box-shadow: 2px 2px 4px #888;
+    box-shadow: 2px 2px 4px #888;
+}
 
 </style>

@@ -3,12 +3,22 @@
     <div>
         <lap-settings @start="start" :startExercise="start" v-if="isSettings"></lap-settings>
 
-        <div class="canvas" v-else>
-            <inhale-exhale v-if="isBreathingPhase"></inhale-exhale>
-            <div v-show="!isBreathingPhase" id="timer"></div>
+        <div v-else-if="isExercise">
+            <div class="canvas">
+                <inhale-exhale v-if="isBreathingPhase"></inhale-exhale>
+
+                <div v-show="!isBreathingPhase" class="breathing-phase">
+                    <div id="timer"></div>
+                </div>
+            </div>
+            <speech>{{ message }}</speech>
         </div>
 
+        <div v-else>
+            <speech>{{ message }}</speech>
+        </div>
     </div>
+
 
 </template>
 
@@ -17,11 +27,13 @@ import LapSettings from "./LapSettings";
 import InhaleExhale from "./InhaleExhale";
 import {Timer} from "../classes/Timer"
 import NoSleep from 'nosleep.js';
+import Speech from "./Simple/Speech";
 
 export default {
-    components: {InhaleExhale, LapSettings},
+    components: {Speech, InhaleExhale, LapSettings},
     data      : () => ({
         isSettings      : true,
+        isExercise      : false,
         laps            : [
             {
                 breaths    : 0,
@@ -34,21 +46,96 @@ export default {
         },
         isBreathingPhase: true,
         flag            : false,
-        domains         : ['localhost', 'wetGrundy.com', 'overflow.com'],
         n               : 0,
-        noSleepLock : new NoSleep()
+        noSleepLock     : new NoSleep(),
+        message         : '',
+        intervalObject  : null,
+        //Время задержки дыхания на вдохе
+        INHALE_TIME: 15,
     }),
     methods   : {
         start(laps) {
-            console.log('app start', laps);
             this.laps = laps;
 
             this.isSettings = false;
+            this.isExercise = true;
             this.isBreathingPhase = true;
 
             this.noSleepStart();
 
             this.runLap(this.laps[this.n]);
+        },
+        runLap(lap) {
+            let that = this;
+            that.currentLap = lap;
+            that.needBreathingPhaseTimer = true;
+            that.needHoldTimer = false;
+            that.needInhaleTimer = false;
+            that.message = 'Вдох-выдох';
+
+            // цикл, пока идет упражнение TODO очищать память после завершения (clear interval)
+            that.intervalObject = setInterval(function () {
+
+                    if (
+                        true === that.isBreathingPhase
+                        && true === that.needBreathingPhaseTimer
+                    ) {
+                        //Фаза дыхания
+                        that.needBreathingPhaseTimer = false;
+
+                        setTimeout(function () {
+                                that.isBreathingPhase = false;
+                                that.needHoldTimer = true;
+                                that.message = 'Задержка на выдохе'
+                            },
+                            //4,5 секунды на дыхание * на количество дыханий
+                            4500 * that.currentLap.breaths
+                        );
+
+                    } else if (true === that.needHoldTimer) {
+                        //Фаза задержки дыхания на выдохе
+                        that.needHoldTimer = false;
+
+                        let timer = new Timer('timer', that.currentLap.waitingTime);
+                        timer.startTimer();
+
+                        setTimeout(function () {
+                                that.needInhaleTimer = true;
+                                that.message = 'Глубокий вдох и небольшая задержка'
+                            },
+                            that.currentLap.waitingTime * 1000
+                        );
+
+                    } else if (true === that.needInhaleTimer) {
+                        that.needInhaleTimer = false;
+                        let it = that.INHALE_TIME;
+                        //Фаза задержки дыхания на вдохе
+                        let timer = new Timer('timer', it);
+                        timer.startTimer();
+                        setTimeout(function () {
+                            that.next();
+                        }, that.INHALE_TIME * 1000)
+                    }
+                },
+                10
+            );
+        },
+        next() {
+            this.n++;
+
+            //всегда очищаем интервал предыдущего круга, для избежания утечки памяти на клиенте
+            this.stopInterval();
+
+            if (this.n < this.laps.length) {
+                this.isBreathingPhase = true;
+                this.runLap(this.laps[this.n]);
+            } else {
+                //упражнение закончено
+                this.noSleepEnd();
+                this.isExercise = false;
+
+                this.message = 'Молодец!';
+            }
         },
         noSleepStart() {
             let that = this;
@@ -64,65 +151,17 @@ export default {
             // (does not need to be wrapped in any user input event handler)
             this.noSleepLock.disable();
         },
-        runLap(lap) {
-            let that = this;
-            that.currentLap = lap;
-            that.needBreathingPhaseTimer = true;
-            that.needHoldTimer = false;
-            that.needInhaleTimer = false;
-
-            // какие-то действия, что-бы дождаться выполнения условий
-
-            setInterval(function () {
-
-                    if (
-                        true === that.isBreathingPhase
-                        && true === that.needBreathingPhaseTimer
-                    ) {
-                        console.log('setTimeoutBreathingPhase');
-                        console.log(that.currentLap.breaths)
-                        that.needBreathingPhaseTimer = false;
-
-                        setTimeout(function () {
-                                that.isBreathingPhase = false;
-                                that.needHoldTimer = true;
-                            },
-                            //4,5 секунды на вдох
-                            4500 * that.currentLap.breaths)
-
-                    } else if (true === that.needHoldTimer) {
-                        console.log('needHoldTimer');
-                        that.needHoldTimer = false;
-
-                        let timer = new Timer('timer', that.currentLap.waitingTime);
-                        timer.startTimer();
-
-                        setTimeout(function () {
-                            that.needInhaleTimer = true;
-                        }, that.currentLap.waitingTime * 1000)
-
-                    } else if (true === that.needInhaleTimer) {
-                        that.needInhaleTimer = false;
-                        console.log('needInhaleTimer');
-                        let timer = new Timer('timer', 15);
-                        timer.startTimer();
-                        setTimeout(function () {
-                            that.next();
-                        }, 15 * 1000)
-                    }
-                },
-                10
-            );
-        },
-        next() {
-            this.n++;
-            if (this.n < this.laps.length) {
-                this.isBreathingPhase = true;
-                this.runLap(this.laps[this.n]);
-            } else {
-                this.noSleepEnd()
-            }
+        stopInterval() {
+            clearInterval(this.intervalObject);
         },
     }
 }
 </script>
+
+<style>
+
+.canvas {
+    height: 300px;
+}
+
+</style>
