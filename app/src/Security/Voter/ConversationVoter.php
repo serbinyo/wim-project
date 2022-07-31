@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Chat\Conversation;
 use App\Repository\Chat\ConversationRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -49,6 +50,7 @@ class ConversationVoter extends Voter
      * @param mixed $subject
      *
      * @return bool
+     * @throws NonUniqueResultException
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
     {
