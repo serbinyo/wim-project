@@ -143,15 +143,13 @@
                     </a>
                 </li>
 
-                {% if app.user %}
-                    <!-- Layouts -->
-                    <li class="menu-item {% if url('chat') == app.request.uri %} active {% endif %}">
-                        <a href="{{ path('chat') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-chat"></i>
-                            <div data-i18n="Layouts">Мессенджер</div>
-                        </a>
-                    </li>
-                {% endif %}
+                <li class="menu-item {% if url('chat') == app.request.uri %} active {% endif %}">
+                    <a href="{{ path('chat') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-chat"></i>
+                        <div data-i18n="Layouts">Мессенджер</div>
+                    </a>
+                </li>
+
             </ul>
         </aside>
         <!-- / Menu -->
