@@ -12,48 +12,87 @@ declare(strict_types=1);
 namespace App\Entity\Wim\Domain\Entity;
 
 
-use App\Entity\Wim\Domain\ValueObject\HoldingTime;
+use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
+use App\Entity\Wim\Domain\ValueObject\Exercise;
 use DateInterval;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Class Lap
  *
  * @package App\Entity\Wim\Domain\Entity
+ * @ORM\Entity
+ * @ORM\Table(name="lap")
  */
 class Lap
 {
     /**
+     * @ORM\Id
+     * @ORM\Column(type="string")
+     *
+     * @var Uuid Идентификатор круга
+     */
+    private Uuid $uuid;
+
+    /**
+     * @ORM\Column(type="integer")
+     *
      * @var int Номер круга
      */
     private int $number;
 
     /**
+     * @ORM\Column(type="integer")
+     *
      * @var int Количество вдохов выдохов
      */
     private int $breaths;
 
     /**
-     * @var HoldingTime объект времени задержки дыханий для дыхательного упражнения
+     * @ORM\Column(type="integer")
+     *
+     * @var int Задержка на выдохе (Задержка перед вдохом), сек.
      */
-    private HoldingTime $holdingTime;
+    private int $exhaleHold;
 
     /**
+     * @ORM\Column(type="integer")
+     *
+     * @var int Задержка на вдохе, сек.
+     */
+    private int $inhaleHold;
+
+    /**
+     * @ORM\Column(type="string")
+     *
      * @var DateInterval Время круга
      */
     private DateInterval $time;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Wim\Domain\Aggregate\BreathingExercise", inversedBy="laps")
+     * @ORM\Column(type="string")
+     */
+    private BreathingExercise $breathingExercise;
+
+
     /**
      * Lap constructor.
      *
-     * @param int         $number
-     * @param int         $breaths
-     * @param HoldingTime $holdingTime
+     * @param Uuid         $uuid
+     * @param int          $number
+     * @param Exercise     $exercise
+     * @param DateInterval $time
      */
-    public function __construct(int $number, int $breaths, HoldingTime $holdingTime, DateInterval $time)
+    public function __construct(Uuid $uuid, int $number, Exercise $exercise, DateInterval $time)
     {
+        $this->uuid = $uuid;
         $this->number = $number;
-        $this->breaths = $breaths;
-        $this->holdingTime = $holdingTime;
+        $this->breaths = $exercise->getBreaths();
+        $this->exhaleHold = $exercise->getExhaleHold();
+        $this->inhaleHold = $exercise->getInhaleHold();
         $this->time = $time;
     }
 
@@ -63,5 +102,25 @@ class Lap
     public function getTime(): DateInterval
     {
         return $this->time;
+    }
+
+    /**
+     * @return BreathingExercise
+     */
+    public function getBreathingExercise(): BreathingExercise
+    {
+        return $this->breathingExercise;
+    }
+
+    /**
+     * @param BreathingExercise $breathingExercise
+     *
+     * @return Lap
+     */
+    public function setBreathingExercise(BreathingExercise $breathingExercise): Lap
+    {
+        $this->breathingExercise = $breathingExercise;
+
+        return $this;
     }
 }

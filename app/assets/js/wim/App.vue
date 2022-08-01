@@ -29,6 +29,8 @@ import {Timer} from "../classes/Timer"
 import NoSleep from 'nosleep.js';
 import Speech from "./Simple/Speech";
 
+const axios = require('axios').default;
+
 export default {
     components: {Speech, InhaleExhale, LapSettings},
     data      : () => ({
@@ -153,6 +155,21 @@ export default {
         },
         stopInterval() {
             clearInterval(this.intervalObject);
+        },
+        addResult() {
+            console.log(this.laps)
+
+            let data = new FormData();
+            data.append('laps', JSON.stringify(this.laps));
+
+            axios.post(
+                '/breath/add',
+                data
+            )
+                .then(function (response) {
+                    // handle success
+                    console.log(response);
+                })
         },
     }
 }

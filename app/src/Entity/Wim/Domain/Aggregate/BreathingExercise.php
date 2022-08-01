@@ -16,6 +16,8 @@ namespace App\Entity\Wim\Domain\Aggregate;
 use App\Entity\User;
 use App\Entity\Wim\Domain\Entity\Lap;
 use DateInterval;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -24,31 +26,46 @@ use Symfony\Component\Uid\Uuid;
  * Агрегат Дыхательное упражнение
  *
  * @package App\Entity\Wim\Domain
+ * @ORM\Entity
+ * @ORM\Table(name="breathing_exercise")
  */
 class BreathingExercise
 {
 
     /**
+     * @ORM\Id
+     * @ORM\Column(type="string")
+     *
      * @var Uuid Идентификатор выполненного упражнения
      */
     private Uuid $uuid;
 
     /**
+    /**
+     * @ORM\Column(type="integet")
+     *
      * @var int Номер упражнения для пользователя
      */
     private int $sessionNumber;
 
     /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="breathingExercises")
+     * @ORM\Column(type="string")
+     *
      * @var User Пользователь
      */
     private User $user;
 
     /**
-     * @var Lap[] массив кругов
+     * @ORM\OneToMany(targetEntity="App\Entity\Wim\Domain\Entity\Lap", mappedBy="breathingExercises")
+     *
+     * @var Lap[]|ArrayCollection массив кругов
      */
     private array $laps;
 
     /**
+     * @ORM\Column(type="string")
+     *
      * @var DateInterval Продолжительность упражнения
      */
     private DateInterval $duration;
@@ -58,9 +75,9 @@ class BreathingExercise
      *
      * @param Uuid  $uuid
      * @param User  $user
-     * @param Lap[] $laps
+     * @param ArrayCollection $laps
      */
-    public function __construct(Uuid $uuid, User $user, array $laps)
+    public function __construct(Uuid $uuid, User $user, ArrayCollection $laps)
     {
         $this->uuid = $uuid;
         $this->user = $user;
@@ -87,6 +104,14 @@ class BreathingExercise
         $this->duration = $duration;
 
         return $this;
+    }
+
+    /**
+     * @return Lap[]|ArrayCollection
+     */
+    public function getLaps(): ArrayCollection|array
+    {
+        return $this->laps;
     }
 
     /**

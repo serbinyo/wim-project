@@ -13,7 +13,7 @@ namespace App\Repository\Wim;
 
 
 /**
- * Interface BreathingExerciseRepository
+ * Interface BreathingExerciseInterface
  *
  * @package App\Repository\Wim
  */

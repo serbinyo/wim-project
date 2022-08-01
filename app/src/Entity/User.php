@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -67,18 +65,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $enabled;
 
     /**
-     * @ORM\OneToMany(targetEntity=Breathing::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $breathings;
-
-    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->roles = [self::ROLE_USER];
         $this->enabled = false;
-        $this->breathings = new ArrayCollection();
     }
 
 
@@ -239,35 +231,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    /**
-     * @return Collection<int, Breathing>
-     */
-    public function getBreathings(): Collection
-    {
-        return $this->breathings;
-    }
-
-    public function addBreathing(Breathing $breathing): self
-    {
-        if (!$this->breathings->contains($breathing)) {
-            $this->breathings[] = $breathing;
-            $breathing->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBreathing(Breathing $breathing): self
-    {
-        if ($this->breathings->removeElement($breathing)) {
-            // set the owning side to null (unless already changed)
-            if ($breathing->getUserId() === $this) {
-                $breathing->setUserId(null);
-            }
-        }
-
-        return $this;
     }
 }
