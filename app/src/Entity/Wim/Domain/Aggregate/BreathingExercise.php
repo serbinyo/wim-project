@@ -34,15 +34,14 @@ class BreathingExercise
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="uuid", unique=true)
      *
-     * @var Uuid Идентификатор выполненного упражнения
+     * @var Uuid
      */
-    private Uuid $uuid;
+    public Uuid $uuid;
 
     /**
-    /**
-     * @ORM\Column(type="integet")
+     * @ORM\Column(type="integer")
      *
      * @var int Номер упражнения для пользователя
      */
@@ -50,7 +49,7 @@ class BreathingExercise
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="breathingExercises")
-     * @ORM\Column(type="string")
+     * @ORM\JoinColumn(nullable=false)
      *
      * @var User Пользователь
      */

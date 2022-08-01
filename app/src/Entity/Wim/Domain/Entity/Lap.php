@@ -29,9 +29,9 @@ class Lap
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="uuid", unique=true)
      *
-     * @var Uuid Èäåíòèôèêàòîğ êğóãà
+     * @var Uuid
      */
     private Uuid $uuid;
 
@@ -122,5 +122,13 @@ class Lap
         $this->breathingExercise = $breathingExercise;
 
         return $this;
+    }
+
+    /**
+     * @return Uuid
+     */
+    public function getUuid(): Uuid
+    {
+        return $this->uuid;
     }
 }
