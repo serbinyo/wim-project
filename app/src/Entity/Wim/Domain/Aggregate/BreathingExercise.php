@@ -9,16 +9,18 @@ declare(strict_types=1);
  * Time: 21:36
  */
 
-
 namespace App\Entity\Wim\Domain\Aggregate;
 
 
+use App\Entity\Ulid;
 use App\Entity\User;
 use App\Entity\Wim\Domain\Entity\Lap;
 use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use App\Repository\Wim\BreathingExerciseRepository;
 
 /**
  * Class BreathingExercise
@@ -26,7 +28,7 @@ use Symfony\Component\Uid\Uuid;
  * Агрегат Дыхательное упражнение
  *
  * @package App\Entity\Wim\Domain
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=BreathingExerciseRepository::class)
  * @ORM\Table(name="breathing_exercise")
  */
 class BreathingExercise
@@ -34,16 +36,15 @@ class BreathingExercise
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(name="id", unique=true, length=36)
      *
-     * @var Uuid
+     * @var Ulid
      */
-    public Uuid $uuid;
+    public Ulid $uuid;
+
 
     /**
      * @ORM\Column(type="integer")
-     *
-     * @var int Номер упражнения для пользователя
      */
     private int $sessionNumber;
 
@@ -51,36 +52,30 @@ class BreathingExercise
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="breathingExercises")
      * @ORM\JoinColumn(nullable=false)
      *
-     * @var User Пользователь
      */
     private User $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Wim\Domain\Entity\Lap", mappedBy="breathingExercises")
-     *
-     * @var Lap[]|ArrayCollection массив кругов
+     * @ORM\OneToMany(targetEntity=Lap::class, mappedBy="breathingExercise")
      */
     private array $laps;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var DateInterval Продолжительность упражнения
      */
     private DateInterval $duration;
 
     /**
      * BreathingExercise constructor.
      *
-     * @param Uuid  $uuid
-     * @param User  $user
-     * @param ArrayCollection $laps
+     * @param Uuid $uuid
+     * @param User $user
      */
-    public function __construct(Uuid $uuid, User $user, ArrayCollection $laps)
+    public function __construct(Uuid $uuid, User $user)
     {
         $this->uuid = $uuid;
         $this->user = $user;
-        $this->laps = $laps;
+        $this->laps = new ArrayCollection();
     }
 
     /**
@@ -106,11 +101,21 @@ class BreathingExercise
     }
 
     /**
-     * @return Lap[]|ArrayCollection
+     * @return Collection<int, Lap>
      */
-    public function getLaps(): ArrayCollection|array
+    public function getLaps(): Collection
     {
         return $this->laps;
+    }
+
+    public function addBreathing(Lap $lap): self
+    {
+        if (!$this->laps->contains($lap)) {
+            $this->laps[] = $lap;
+            $lap->setBreathingExercise($this);
+        }
+
+        return $this;
     }
 
     /**
@@ -125,5 +130,25 @@ class BreathingExercise
         }
 
         $this->duration = $duration;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return BreathingExercise
+     */
+    public function setUser(User $user): BreathingExercise
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

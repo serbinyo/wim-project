@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace App\Entity\Wim\Domain\Entity;
 
 
+use App\Entity\Ulid;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Entity\Wim\Domain\ValueObject\Exercise;
 use DateInterval;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * Class Lap
@@ -29,51 +29,45 @@ class Lap
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(name="id", unique=true, length=36)
      *
-     * @var Uuid
+     * @var Ulid
      */
-    private Uuid $uuid;
+    private Ulid $uuid;
+
 
     /**
      * @ORM\Column(type="integer")
-     *
-     * @var int Íîìåğ êğóãà
      */
     private int $number;
 
+
     /**
      * @ORM\Column(type="integer")
-     *
-     * @var int Êîëè÷åñòâî âäîõîâ âûäîõîâ
      */
     private int $breaths;
 
+
     /**
      * @ORM\Column(type="integer")
-     *
-     * @var int Çàäåğæêà íà âûäîõå (Çàäåğæêà ïåğåä âäîõîì), ñåê.
      */
     private int $exhaleHold;
 
+
     /**
      * @ORM\Column(type="integer")
-     *
-     * @var int Çàäåğæêà íà âäîõå, ñåê.
      */
     private int $inhaleHold;
 
+
     /**
      * @ORM\Column(type="string")
-     *
-     * @var DateInterval Âğåìÿ êğóãà
      */
     private DateInterval $time;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Wim\Domain\Aggregate\BreathingExercise", inversedBy="laps")
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity=BreathingExercise::class, inversedBy="laps")
+     * @ORM\JoinColumn(nullable=false)
      */
     private BreathingExercise $breathingExercise;
 
@@ -81,12 +75,12 @@ class Lap
     /**
      * Lap constructor.
      *
-     * @param Uuid         $uuid
+     * @param Ulid         $uuid
      * @param int          $number
      * @param Exercise     $exercise
      * @param DateInterval $time
      */
-    public function __construct(Uuid $uuid, int $number, Exercise $exercise, DateInterval $time)
+    public function __construct(Ulid $uuid, int $number, Exercise $exercise, DateInterval $time)
     {
         $this->uuid = $uuid;
         $this->number = $number;
@@ -125,9 +119,9 @@ class Lap
     }
 
     /**
-     * @return Uuid
+     * @return Ulid
      */
-    public function getUuid(): Uuid
+    public function getUuid(): Ulid
     {
         return $this->uuid;
     }
