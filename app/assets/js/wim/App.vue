@@ -17,6 +17,8 @@
         <div v-else>
             <speech>{{ message }}</speech>
         </div>
+
+        <br><button @click.prevent="addResult">save</button>
     </div>
 
 
