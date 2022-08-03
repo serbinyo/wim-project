@@ -16,10 +16,10 @@ use App\Entity\Ulid;
 use App\Entity\User;
 use App\Entity\Wim\Domain\Entity\Lap;
 use DateInterval;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
 use App\Repository\Wim\BreathingExerciseRepository;
 
 /**
@@ -57,8 +57,10 @@ class BreathingExercise
 
     /**
      * @ORM\OneToMany(targetEntity=Lap::class, mappedBy="breathingExercise")
+     *
+     * @param ArrayCollection|Lap[]
      */
-    private array $laps;
+    private ArrayCollection $laps;
 
     /**
      * @ORM\Column(type="string")
@@ -66,12 +68,17 @@ class BreathingExercise
     private DateInterval $duration;
 
     /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private DateTime $dateCreate;
+
+    /**
      * BreathingExercise constructor.
      *
-     * @param Uuid $uuid
+     * @param Ulid $uuid
      * @param User $user
      */
-    public function __construct(Uuid $uuid, User $user)
+    public function __construct(Ulid $uuid, User $user)
     {
         $this->uuid = $uuid;
         $this->user = $user;
@@ -108,7 +115,7 @@ class BreathingExercise
         return $this->laps;
     }
 
-    public function addBreathing(Lap $lap): self
+    public function addLap(Lap $lap): self
     {
         if (!$this->laps->contains($lap)) {
             $this->laps[] = $lap;
@@ -130,6 +137,18 @@ class BreathingExercise
         }
 
         $this->duration = $duration;
+    }
+
+    /**
+     * @param DateTime $dateCreate
+     *
+     * @return BreathingExercise
+     */
+    public function setDateCreate(DateTime $dateCreate): BreathingExercise
+    {
+        $this->dateCreate = $dateCreate;
+
+        return $this;
     }
 
     /**
