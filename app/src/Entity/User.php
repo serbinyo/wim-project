@@ -88,6 +88,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return User
+     */
+    public function setId(int $id): User
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -258,5 +270,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return 'id:' . $this->id . ' ' . $this->email;
     }
 }

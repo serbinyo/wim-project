@@ -20,6 +20,11 @@ use function get_class;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    /**
+     *
+     */
+    public const TABLE = 'user';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);

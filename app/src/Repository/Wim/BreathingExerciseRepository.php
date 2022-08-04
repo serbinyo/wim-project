@@ -15,6 +15,7 @@ namespace App\Repository\Wim;
 use App\Entity\Ulid;
 use App\Entity\User;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
+use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
@@ -33,16 +34,36 @@ use Doctrine\ORM\EntityManagerInterface;
 class BreathingExerciseRepository implements BreathingExerciseInterface
 {
     /**
-     * @var
+     *
      */
-    private $connection;
+    public const TABLE_NAME = 'breathing_exercise';
+
+    /**
+     *
+     */
+    public const TABLE_ALIAS = 'be';
+
+    /**
+     *
+     */
+    public const USER_TABLE_ALIAS = 'u';
+
+    /**
+     *
+     */
+    public const LAP_TABLE_ALIAS = 'l';
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
 
     /**
      * BreathingExerciseRepository constructor.
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->connection = $entityManager->getConnection();
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -86,14 +107,37 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
      */
     public function findBy(array $filter): ArrayCollection
     {
-        $qb = $this->connection->createQueryBuilder()
-            ->from(self::TABLE_NAME)
-            ->select('id', 'user_id', 'session_number', 'duration', 'date_create');
+        $be = self::TABLE_ALIAS;
+        $u = self::USER_TABLE_ALIAS;
+
+        $qb = $this->entityManager->getConnection()->createQueryBuilder()
+            ->from(self::TABLE_NAME, $be)
+            ->select(
+                "$be.id",
+                "$be.session_number",
+                "$be.duration",
+                "$be.date_create",
+                "$u.id as user_id",
+                "$u.email",
+                "$u.name"
+            )
+            ->leftJoin(
+                self::TABLE_ALIAS,
+                UserRepository::TABLE,
+                self::USER_TABLE_ALIAS,
+                "$u.id = $be.user_id"
+            );
 
         $res = $this->filter($qb, $filter)
             ->executeQuery()->fetchAllAssociative();
-        
-        return new ArrayCollection($res);
+
+        $collection = new ArrayCollection();
+
+        foreach ($res as $r) {
+            $collection->add($this->fromArray($r));
+        }
+
+        return $collection;
     }
 
     public function getEmptyObject(): BreathingExercise
@@ -116,6 +160,8 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
      */
     private function filter(QueryBuilder $qb, array $filter): QueryBuilder
     {
+        $be = self::TABLE_ALIAS;
+
         $qb->where('1 = 1');
 
         $filter = array_map(
@@ -133,10 +179,10 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
 
         if (array_key_exists('id', $filter)) {
             if (is_array($filter['id'])) {
-                $qb->andWhere($qb->expr()->in('id', ':id'))
+                $qb->andWhere($qb->expr()->in("$be.id", ':id'))
                     ->setParameter('id', $filter['id'], Connection::PARAM_STR_ARRAY);
             } else {
-                $qb->andWhere('id = :id')
+                $qb->andWhere("$be.id = :id")
                     ->setParameter('id', $filter['id']);
             }
         }
@@ -166,5 +212,25 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
         }
 
         return $qb;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function fromArray(array $data): BreathingExercise
+    {
+
+        $exercise = new BreathingExercise(
+            new Ulid($data['id']),
+            (new User())
+                ->setId((int)$data['user_id'])
+                ->setEmail((string)$data['email'])
+                ->setName((string)$data['name'])
+        );
+        $exercise->setSessionNumber((int)$data['session_number']);
+        $exercise->setDuration(new \DateInterval('PT' . $data['duration'] . 'S'));
+        $exercise->setDateCreate(new DateTime($data['date_create']));
+
+        return $exercise;
     }
 }

@@ -26,11 +26,6 @@ interface BreathingExerciseInterface
     /**
      *
      */
-    public const TABLE_NAME = 'breathing_exercise';
-
-    /**
-     *
-     */
     public function find($id): BreathingExercise;
 
     public function findOneBy(array $criteria): BreathingExercise;
