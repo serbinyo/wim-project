@@ -25,7 +25,6 @@ use App\Repository\Wim\BreathingExerciseRepository;
 /**
  * Class BreathingExercise
  *
- * Агрегат Дыхательное упражнение
  *
  * @package App\Entity\Wim\Domain
  * @ORM\Entity(repositoryClass=BreathingExerciseRepository::class)
@@ -126,7 +125,7 @@ class BreathingExercise
     }
 
     /**
-     * Посчитать временной интервал
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      */
     public function countDuration()
     {

@@ -97,7 +97,7 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
     }
 
     /**
-     * Получить записи по фильтру
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      *
      * @param array $filter
      *
@@ -149,7 +149,7 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
     }
 
     /**
-     * Подготовка фильтра
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      *
      * @param QueryBuilder $qb
      * @param array        $filter
