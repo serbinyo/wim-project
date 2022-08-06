@@ -15,13 +15,14 @@ namespace App\Repository\Wim;
 use App\Entity\Ulid;
 use App\Entity\User;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
+use App\Entity\Wim\Domain\Entity\Lap;
+use App\Entity\Wim\Domain\ValueObject\Exercise;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -36,7 +37,12 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
     /**
      *
      */
-    public const TABLE_NAME = 'breathing_exercise';
+    public const TABLE = 'breathing_exercise';
+
+    /**
+     *
+     */
+    public const TABLE_LAP = 'lap';
 
     /**
      *
@@ -70,21 +76,41 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
      * @param $id
      *
      * @return BreathingExercise
+     * @throws Exception
      */
     public function find($id): BreathingExercise
     {
-        // TODO: Implement find() method.
+        $result = $this->getEmptyObject();
+        $filter['limit'] = 1;
+        $filter['id'] = $id;
+
+        $collection = $this->findBy($filter);
+
+        if (!$collection->isEmpty()) {
+            $result = $collection->first();
+        }
+
+        return $result;
     }
 
     /**
-     * @param array      $criteria
-     * @param array|null $orderBy
+     * @param array $filter
      *
      * @return BreathingExercise
+     * @throws Exception
      */
-    public function findOneBy(array $criteria): BreathingExercise
+    public function findOneBy(array $filter): BreathingExercise
     {
-        // TODO: Implement findOneBy() method.
+        $result = $this->getEmptyObject();
+        $filter['limit'] = 1;
+
+        $collection = $this->findBy($filter);
+
+        if (!$collection->isEmpty()) {
+            $result = $collection->first();
+        }
+
+        return $result;
     }
 
     /**
@@ -97,7 +123,6 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
     }
 
     /**
-     * �������� ������ �� �������
      *
      * @param array $filter
      *
@@ -111,7 +136,7 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
         $u = self::USER_TABLE_ALIAS;
 
         $qb = $this->entityManager->getConnection()->createQueryBuilder()
-            ->from(self::TABLE_NAME, $be)
+            ->from(self::TABLE, $be)
             ->select(
                 "$be.id",
                 "$be.session_number",
@@ -149,7 +174,6 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
     }
 
     /**
-     * ���������� �������
      *
      * @param QueryBuilder $qb
      * @param array        $filter
@@ -176,6 +200,10 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
         );
 
         $filter = array_filter($filter);
+
+        if (array_key_exists('limit', $filter)) {
+            $qb->setMaxResults((int)$filter['limit']);
+        }
 
         if (array_key_exists('id', $filter)) {
             if (is_array($filter['id'])) {
@@ -219,7 +247,6 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
      */
     private function fromArray(array $data): BreathingExercise
     {
-
         $exercise = new BreathingExercise(
             new Ulid($data['id']),
             (new User())
@@ -231,6 +258,64 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
         $exercise->setDuration(new \DateInterval('PT' . $data['duration'] . 'S'));
         $exercise->setDateCreate(new DateTime($data['date_create']));
 
+        $this->loadLaps($exercise);
+
         return $exercise;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function loadLaps(BreathingExercise $breathingExercise): BreathingExercise
+    {
+        $l = self::LAP_TABLE_ALIAS;
+
+        $qb = $this->entityManager->getConnection()->createQueryBuilder()
+            ->select(
+                "$l.id",
+                "$l.breathing_exercise_id",
+                "$l.number",
+                "$l.breaths",
+                "$l.exhale_hold",
+                "$l.inhale_hold",
+                "$l.time",
+                "$l.date_create",
+            )
+            ->from(self::TABLE_LAP, $l)
+            ->where('1 = 1')
+            ->andWhere("$l.breathing_exercise_id = :bid")
+            ->setParameter('bid', $breathingExercise->getUuid()->getUlid())
+            ->orderBy("$l.number", 'asc');
+
+        $res = $qb->executeQuery()->fetchAllAssociative();
+
+        foreach ($res as $l) {
+            $breathingExercise->addLap($this->lapFromArray($l));
+        }
+
+        return $breathingExercise;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function lapFromArray(array $data): Lap
+    {
+        $exerciseParams = new Exercise(
+            $data['breaths'],
+            $data['exhale_hold'],
+            $data['inhale_hold']
+        );
+
+        $lap = new Lap(
+            new Ulid($data['id']),
+            $data['number'],
+            $exerciseParams,
+            new \DateInterval('PT' . $data['time'] . 'S')
+        );
+
+        $lap->setDateCreate(new DateTime($data['date_create']));
+
+        return $lap;
     }
 }

@@ -39,13 +39,12 @@ class Exerciser implements ExerciserInterface
      */
     public function addExercise(array $exercise): bool
     {
-        $a = $this->breathingExerciseRepository->findBy(['id' => 'c9e09d42-006f-42fc-90b2-950667953e2a']);
+        $a = $this->breathingExerciseRepository->findOneBy(['id' => 'c9e09d42-006f-42fc-90b2-950667953e2a']);
 
-        /** @var BreathingExercise $exercise */
-        $exercise = $a->get(0);
+        echo '<pre>';print_r($a);echo '</pre>';
 
-        
-        echo '<pre>';print_r((string)$exercise->getUser());echo '</pre>';
+        echo '<pre>';print_r($exercise);echo '</pre>';
+
 
         echo '<pre>';print_r('addExercise');echo '</pre>';die;
     }

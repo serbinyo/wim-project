@@ -85,6 +85,14 @@ class BreathingExercise
     }
 
     /**
+     * @return Ulid
+     */
+    public function getUuid(): Ulid
+    {
+        return $this->uuid;
+    }
+
+    /**
      * @param int $sessionNumber
      *
      * @return BreathingExercise
@@ -107,6 +115,14 @@ class BreathingExercise
     }
 
     /**
+     * @return DateInterval
+     */
+    public function getDuration(): DateInterval
+    {
+        return $this->duration;
+    }
+
+    /**
      * @return Collection<int, Lap>
      */
     public function getLaps(): Collection
@@ -125,7 +141,7 @@ class BreathingExercise
     }
 
     /**
-     * ��������� ��������� ��������
+     *
      */
     public function countDuration()
     {

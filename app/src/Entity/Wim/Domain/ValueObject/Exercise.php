@@ -15,24 +15,23 @@ namespace App\Entity\Wim\Domain\ValueObject;
 /**
  * Class Exercise
  *
- * ����� ������� ����������� ���� ������ ���������� (��� �����)
  *
  * @package App\Entity\Wim\Domain\ValueObject
  */
 class Exercise
 {
     /**
-     * @var int ���������� ������ �������
+     * @var int Количество дыханий
      */
     private int $breaths;
 
     /**
-     * @var int �������� �� ������ (�������� ����� ������), ���.
+     * @var int Задержка на выдохе
      */
     private int $exhaleHold;
 
     /**
-     * @var int �������� �� �����, ���.
+     * @var int Задержка на вдохе
      */
     private int $inhaleHold;
 
@@ -40,11 +39,11 @@ class Exercise
     /**
      * Exercise constructor.
      *
-     * @param int $exhaleHold
      * @param int $breaths
+     * @param int $exhaleHold
      * @param int $inhaleHold
      */
-    public function __construct(int $exhaleHold, int $breaths, int $inhaleHold)
+    public function __construct(int $breaths, int $exhaleHold, int $inhaleHold)
     {
         $this->breaths = $breaths;
         $this->exhaleHold = $exhaleHold;
