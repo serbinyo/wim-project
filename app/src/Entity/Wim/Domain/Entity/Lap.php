@@ -16,6 +16,7 @@ use App\Entity\Ulid;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Entity\Wim\Domain\ValueObject\Exercise;
 use DateInterval;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -71,6 +72,11 @@ class Lap
      */
     private BreathingExercise $breathingExercise;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private DateTime $dateCreate;
+
 
     /**
      * Lap constructor.
@@ -124,5 +130,25 @@ class Lap
     public function getUuid(): Ulid
     {
         return $this->uuid;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDateCreate(): DateTime
+    {
+        return $this->dateCreate;
+    }
+
+    /**
+     * @param DateTime $dateCreate
+     *
+     * @return Lap
+     */
+    public function setDateCreate(DateTime $dateCreate): Lap
+    {
+        $this->dateCreate = $dateCreate;
+
+        return $this;
     }
 }
