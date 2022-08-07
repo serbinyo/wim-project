@@ -12,7 +12,8 @@ declare(strict_types=1);
 namespace App\Controller\Wim;
 
 
-use App\Service\Wim\Exerciser;
+use App\UseCase\Wim\AddExercise\Command;
+use App\UseCase\Wim\AddExercise\Handler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,13 +30,16 @@ class BreathingExercise extends AbstractController
     /**
      *
      * @return JsonResponse
+     * @throws \Doctrine\DBAL\Exception
      */
     #[Route('/breath/add', name: 'addBreathExercise', methods: ['POST'])]
-    public function add(Request $request, Exerciser $exerciser)
+    public function add(Request $request, Handler $handler)
     {
         $laps = json_decode($request->request->get('laps'), true);
 
-        $exerciser->addExercise($laps);
+        $command = new Command($laps);
+
+        $handler->handle($command);
 
         return $this->json($laps, Response::HTTP_CREATED, [], []);
     }
