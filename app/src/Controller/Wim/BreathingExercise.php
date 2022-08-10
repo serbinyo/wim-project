@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class BreathingExercise
@@ -33,7 +34,7 @@ class BreathingExercise extends AbstractController
      * @throws \Doctrine\DBAL\Exception
      */
     #[Route('/breath/add', name: 'addBreathExercise', methods: ['POST'])]
-    public function add(Request $request, Handler $handler)
+    public function add(Request $request, Handler $handler, UserInterface $user)
     {
         $laps = json_decode($request->request->get('laps'), true);
 

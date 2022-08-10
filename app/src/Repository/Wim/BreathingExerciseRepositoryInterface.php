@@ -16,12 +16,12 @@ use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Interface BreathingExerciseInterface
+ * Interface BreathingExerciseRepositoryInterface
  *
  * @package App\Repository\Wim
  *
  */
-interface BreathingExerciseInterface
+interface BreathingExerciseRepositoryInterface
 {
     /**
      *
@@ -35,4 +35,6 @@ interface BreathingExerciseInterface
     public function findBy(array $filter): ArrayCollection;
 
     public function getEmptyObject(): BreathingExercise;
+
+    public function add(BreathingExercise $breathingExercise): BreathingExercise;
 }

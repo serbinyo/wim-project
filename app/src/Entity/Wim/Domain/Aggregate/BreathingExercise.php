@@ -15,6 +15,8 @@ namespace App\Entity\Wim\Domain\Aggregate;
 use App\Entity\Ulid;
 use App\Entity\User;
 use App\Entity\Wim\Domain\Entity\Lap;
+use App\Repository\Wim\BreathingExerciseRepositoryInterface;
+use App\Service\DateMaker;
 use DateInterval;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -145,7 +147,7 @@ class BreathingExercise
      */
     public function countDuration()
     {
-        $duration = DateInterval::createFromDateString('0 seconds');
+        $duration = DateMaker::intervalEmpty();
 
         foreach ($this->laps as $lap) {
             $duration += $lap->getTime();
@@ -183,6 +185,17 @@ class BreathingExercise
     {
         $this->user = $user;
 
+        return $this;
+    }
+
+    /**
+     * @param BreathingExerciseRepositoryInterface $storage
+     *
+     * @return $this
+     */
+    public function add(BreathingExerciseRepositoryInterface $storage)
+    {
+        $storage->add($this);
         return $this;
     }
 }

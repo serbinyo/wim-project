@@ -18,6 +18,7 @@ use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Entity\Wim\Domain\Entity\Lap;
 use App\Entity\Wim\Domain\ValueObject\Exercise;
 use App\Repository\UserRepository;
+use App\Service\DateMaker;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
@@ -32,7 +33,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * @package App\Repository\Wim
  *
  */
-class BreathingExerciseRepository implements BreathingExerciseInterface
+class BreathingExerciseRepository implements BreathingExerciseRepositoryInterface
 {
     /**
      *
@@ -165,6 +166,13 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
         return $collection;
     }
 
+    public function add(BreathingExercise $breathingExercise): BreathingExercise
+    {
+        $qb = $this->entityManager->getConnection()->createQueryBuilder();
+
+        return $breathingExercise;
+    }
+
     public function getEmptyObject(): BreathingExercise
     {
         return new BreathingExercise(
@@ -255,7 +263,7 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
                 ->setName((string)$data['name'])
         );
         $exercise->setSessionNumber((int)$data['session_number']);
-        $exercise->setDuration(new \DateInterval('PT' . $data['duration'] . 'S'));
+        $exercise->setDuration(DateMaker::intervalFromSeconds((float)$data['duration']));
         $exercise->setDateCreate(new DateTime($data['date_create']));
 
         $this->loadLaps($exercise);
@@ -311,7 +319,7 @@ class BreathingExerciseRepository implements BreathingExerciseInterface
             new Ulid($data['id']),
             $data['number'],
             $exerciseParams,
-            new \DateInterval('PT' . $data['time'] . 'S')
+            DateMaker::intervalFromSeconds((float)$data['time'])
         );
 
         $lap->setDateCreate(new DateTime($data['date_create']));
