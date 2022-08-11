@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\UseCase\Wim\AddExercise;
 
+use App\DTO\Wim\LapDTO;
 use App\Entity\Ulid;
-use App\Entity\Wim\Domain\Entity\Lap;
+use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Repository\Wim\BreathingExerciseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  *
@@ -29,18 +31,19 @@ class Handler
      */
     public function handle(Command $command)
     {
+        /** @var UserInterface $user */
         $user = $command->user;
+
+        /** @var ArrayCollection|LapDTO[] $laps */
         $laps = $command->laps;
 
-//        foreach ($command->laps as $lap) {
-//            $lapsCollection = new Lap(
-//                new Ulid('')
-//            );
-//        }
 
-        $a = $this->breathingExerciseRepository->findOneBy(['id' => 'c9e09d42-006f-42fc-90b2-950667953e2a']);
 
-        echo '<pre>';print_r($a);echo '</pre>';
+        $newExercise = new BreathingExercise(
+            new Ulid(),
+            $user,
+        );
+        $newExercise->addLap();
 
 
         echo '<pre>';print_r('addExercise');echo '</pre>';die;

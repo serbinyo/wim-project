@@ -23,6 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\Wim\BreathingExerciseRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class BreathingExercise
@@ -77,9 +78,9 @@ class BreathingExercise
      * BreathingExercise constructor.
      *
      * @param Ulid $uuid
-     * @param User $user
+     * @param UserInterface $user
      */
-    public function __construct(Ulid $uuid, User $user)
+    public function __construct(Ulid $uuid, UserInterface $user)
     {
         $this->uuid = $uuid;
         $this->user = $user;
