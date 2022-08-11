@@ -36,30 +36,15 @@ class Lap
      */
     private Ulid $uuid;
 
-
     /**
      * @ORM\Column(type="integer")
      */
     private int $number;
 
-
     /**
-     * @ORM\Column(type="integer")
+     * @Embedded(class=Exercise::class)
      */
-    private int $breaths;
-
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private int $exhaleHold;
-
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private int $inhaleHold;
-
+    private Exercise $exercise;
 
     /**
      * @ORM\Column(type="string")
@@ -81,27 +66,15 @@ class Lap
     /**
      * Lap constructor.
      *
-     * @param Ulid         $uuid
-     * @param int          $number
-     * @param Exercise     $exercise
-     * @param DateInterval $time
+     * @param Ulid     $uuid
+     * @param int      $number
+     * @param Exercise $exercise
      */
-    public function __construct(Ulid $uuid, int $number, Exercise $exercise, DateInterval $time)
+    public function __construct(Ulid $uuid, int $number, Exercise $exercise)
     {
         $this->uuid = $uuid;
         $this->number = $number;
-        $this->breaths = $exercise->getBreaths();
-        $this->exhaleHold = $exercise->getExhaleHold();
-        $this->inhaleHold = $exercise->getInhaleHold();
-        $this->time = $time;
-    }
-
-    /**
-     * @return DateInterval
-     */
-    public function getTime(): DateInterval
-    {
-        return $this->time;
+        $this->exercise = $exercise;
     }
 
     /**
@@ -150,5 +123,45 @@ class Lap
         $this->dateCreate = $dateCreate;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumber(): int
+    {
+        return $this->number;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBreaths(): int
+    {
+        return $this->exercise->getBreaths();
+    }
+
+    /**
+     * @return int
+     */
+    public function getExhaleHold(): int
+    {
+        return $this->exercise->getExhaleHold();
+    }
+
+    /**
+     * @return int
+     */
+    public function getInhaleHold(): int
+    {
+        return $this->exercise->getInhaleHold();
+    }
+
+    /**
+     * @return DateInterval
+     */
+    public function getTime(): DateInterval
+    {
+        return $this->exercise->getTime();
     }
 }

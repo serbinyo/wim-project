@@ -12,28 +12,48 @@ declare(strict_types=1);
 namespace App\Entity\Wim\Domain\ValueObject;
 
 
+use App\Service\DateMaker;
+use DateInterval;
+
 /**
  * Class Exercise
  *
+ * Выполненное упражнение на одном круге
  *
  * @package App\Entity\Wim\Domain\ValueObject
  */
 class Exercise
 {
     /**
+     * Время на один вдох
+     */
+    public const BREATH_TIME = 4.5;
+
+    /**
      * @var int Количество дыханий
+     *
+     * @ORM\Column(type="integer")
      */
     private int $breaths;
 
     /**
      * @var int Задержка на выдохе
+     *
+     * @ORM\Column(type="integer")
      */
     private int $exhaleHold;
 
     /**
      * @var int Задержка на вдохе
+     *
+     * @ORM\Column(type="integer")
      */
     private int $inhaleHold;
+
+    /**
+     * @ORM\Column(type="dateInterval")
+     */
+    private ?DateInterval $time = null;
 
 
     /**
@@ -72,5 +92,24 @@ class Exercise
     public function getBreaths(): int
     {
         return $this->breaths;
+    }
+
+    /**
+     * @return DateInterval
+     */
+    public function getLapTime(): DateInterval
+    {
+        if ($this->time === null) {
+            $this->countTime();
+        }
+
+        return $this->time;
+    }
+
+
+    private function countTime()
+    {
+        $duration = $this->breaths * self::BREATH_TIME + $this->exhaleHold + $this->inhaleHold;
+        $this->time = DateMaker::intervalFromSeconds($duration);
     }
 }

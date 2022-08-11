@@ -7,6 +7,8 @@ namespace App\UseCase\Wim\AddExercise;
 use App\DTO\Wim\LapDTO;
 use App\Entity\Ulid;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
+use App\Entity\Wim\Domain\Entity\Lap;
+use App\Entity\Wim\Domain\ValueObject\Exercise;
 use App\Repository\Wim\BreathingExerciseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,13 +39,26 @@ class Handler
         /** @var ArrayCollection|LapDTO[] $laps */
         $laps = $command->laps;
 
-
-
         $newExercise = new BreathingExercise(
             new Ulid(),
             $user,
         );
-        $newExercise->addLap();
+
+        /** @var LapDTO $lapDTO */
+        foreach ($laps as $lapDTO) {
+            $lap = new Lap(
+                new Ulid(),
+                $lapDTO->number,
+                new Exercise(
+                    $lapDTO->breaths,
+                    $lapDTO->waitingTime,
+                    $lapDTO->inhaleHold
+                )
+            );
+
+            $newExercise->addLap($lap);
+        }
+
 
 
         echo '<pre>';print_r('addExercise');echo '</pre>';die;
