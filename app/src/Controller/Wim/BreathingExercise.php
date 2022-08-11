@@ -33,6 +33,14 @@ use Symfony\Component\Serializer\Serializer;
  */
 class BreathingExercise extends AbstractController
 {
+    private Deserializer $deserializer;
+
+    public function __construct(Deserializer $deserializer)
+    {
+        $this->deserializer = $deserializer;
+    }
+
+
     /**
      *
      * @return JsonResponse
@@ -41,8 +49,10 @@ class BreathingExercise extends AbstractController
     #[Route('/breath/add', name: 'addBreathExercise', methods: ['POST'])]
     public function add(Request $request, Handler $handler, UserInterface $user)
     {
-        $laps = (new Deserializer())
-            ->jsonCollectionToObjectCollection($request->request->get('laps'), TestLapDTO::class);
+        $laps = $this->deserializer->jsonCollectionToObjectCollection(
+            $request->request->get('laps'),
+            TestLapDTO::class
+        );
 
         $command = new Command($user, $laps);
 

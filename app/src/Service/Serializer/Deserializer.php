@@ -2,6 +2,7 @@
 
 namespace App\Service\Serializer;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -37,14 +38,14 @@ class Deserializer
         $this->serializer->deserialize($data, $class, self::JSON);
     }
 
-    public function jsonCollectionToObjectCollection(string $data, string $class) : array
+    public function jsonCollectionToObjectCollection(string $data, string $class) : ArrayCollection
     {
         $items = json_decode($data, true);
 
-        $collection = [];
+        $collection = new ArrayCollection();
 
         foreach ($items as $item) {
-            $collection[] = $this->serializer->deserialize(json_encode($item), $class, self::JSON);
+            $collection->add($this->serializer->deserialize(json_encode($item), $class, self::JSON));
         }
 
         return $collection;

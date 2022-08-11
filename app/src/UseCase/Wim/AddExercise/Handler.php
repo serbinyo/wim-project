@@ -29,15 +29,14 @@ class Handler
      */
     public function handle(Command $command)
     {
-        $lapsCollection = new ArrayCollection();
-
+        $user = $command->user;
         $laps = $command->laps;
 
-        foreach ($command->laps as $lap) {
-            $lapsCollection = new Lap(
-                new Ulid('')
-            );
-        }
+//        foreach ($command->laps as $lap) {
+//            $lapsCollection = new Lap(
+//                new Ulid('')
+//            );
+//        }
 
         $a = $this->breathingExerciseRepository->findOneBy(['id' => 'c9e09d42-006f-42fc-90b2-950667953e2a']);
 
