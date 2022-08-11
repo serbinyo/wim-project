@@ -33,6 +33,7 @@ import NoSleep from 'nosleep.js';
 import Speech from "./Simple/Speech";
 
 const axios = require('axios').default;
+const INHALE_TIME = 15;
 
 export default {
     components: {Speech, InhaleExhale, LapSettings},
@@ -58,10 +59,11 @@ export default {
         message         : '',
         intervalObject  : null,
         //Время задержки дыхания на вдохе
-        INHALE_TIME: 15,
+        INHALE_TIME: INHALE_TIME,
     }),
     methods   : {
         start(laps) {
+            console.log(this.INHALE_TIME)
             this.laps = laps;
 
             this.isSettings = false;

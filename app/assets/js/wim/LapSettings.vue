@@ -80,8 +80,10 @@ export default {
     methods: {
         addLap() {
             this.laps.push({
+                number: this.laps.length + 1,
                 breaths : '',
-                waitingTime : ''
+                waitingTime : '',
+                inhaleHold : INHALE_TIME
             });
         },
         async start () {
