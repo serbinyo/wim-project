@@ -18,7 +18,8 @@
             <speech>{{ message }}</speech>
         </div>
 
-        <br><button @click.prevent="addResult">save</button>
+        <br>
+        <button @click.prevent="addResult">save</button>
     </div>
 
 
@@ -40,8 +41,10 @@ export default {
         isExercise      : false,
         laps            : [
             {
+                number     : 0,
                 breaths    : 0,
-                waitingTime: 0
+                waitingTime: 0,
+                inhaleHold : 0
             }
         ],
         currentLap      : {
@@ -77,7 +80,8 @@ export default {
             that.needInhaleTimer = false;
             that.message = 'Вдох-выдох';
 
-            // цикл, пока идет упражнение TODO очищать память после завершения (clear interval)
+            // цикл, пока идет упражнение
+            // done - очищать память после завершения (clear interval)
             that.intervalObject = setInterval(function () {
 
                     if (
@@ -159,8 +163,6 @@ export default {
             clearInterval(this.intervalObject);
         },
         addResult() {
-            console.log(this.laps)
-
             let data = new FormData();
             data.append('laps', JSON.stringify(this.laps));
 

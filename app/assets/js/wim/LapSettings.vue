@@ -38,6 +38,8 @@
 import useVuelidate from '@vuelidate/core'
 import { helpers, noEmptyLapSettings  } from '../classes/Vuelidate/Validators'
 
+const INHALE_TIME = 15;
+
 export default {
     setup () {
         return { v$: useVuelidate() }
@@ -46,18 +48,25 @@ export default {
         'startExercise'
     ],
     data: () => ({
+        INHALE_TIME: INHALE_TIME,
         laps    : [
             {
+                number: 1,
                 breaths : 30,
-                waitingTime : 30
+                waitingTime : 30,
+                inhaleHold : INHALE_TIME
             },
             {
+                number: 2,
                 breaths : 30,
-                waitingTime : 60
+                waitingTime : 60,
+                inhaleHold : INHALE_TIME
             },
             {
+                number: 3,
                 breaths : 30,
-                waitingTime : 90
+                waitingTime : 90,
+                inhaleHold : INHALE_TIME
             }
         ],
     }),
