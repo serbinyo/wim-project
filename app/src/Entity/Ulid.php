@@ -20,17 +20,18 @@ class Ulid
     /**
      * @var \Symfony\Component\Uid\Ulid
      */
-    protected $ulid = '';
+    protected $ulid;
 
     /**
      * Uuid constructor.
      *
      * @param $ulid
      */
-    public function __construct($ulid)
+    public function __construct($ulid = null)
     {
-        # если число, то конвертируем в Ulid
-        if (
+        if ($ulid === null) {
+            $ulid = \Symfony\Component\Uid\Ulid::generate();
+        } elseif ( # если число, то конвертируем в Ulid
             is_int($ulid)
             || is_numeric($ulid)
         ) {
@@ -38,14 +39,6 @@ class Ulid
         }
 
         $this->ulid = \Symfony\Component\Uid\Ulid::fromString($ulid);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return (int)(string)$this->ulid;
     }
 
     /**
