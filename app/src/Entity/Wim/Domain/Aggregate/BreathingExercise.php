@@ -18,7 +18,7 @@ use App\Entity\Wim\Domain\Entity\Lap;
 use App\Repository\Wim\BreathingExerciseRepositoryInterface;
 use App\Service\DateMaker;
 use DateInterval;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -72,7 +72,7 @@ class BreathingExercise
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private DateTime $dateCreate;
+    private DateTimeImmutable $dateCreate;
 
     /**
      * BreathingExercise constructor.
@@ -80,57 +80,25 @@ class BreathingExercise
      * @param Ulid $uuid
      * @param UserInterface $user
      */
-    public function __construct(Ulid $uuid, UserInterface $user)
+    public function __construct(Ulid $uuid, UserInterface $user, DateTimeImmutable $dateCreate)
     {
         $this->uuid = $uuid;
         $this->user = $user;
+        $this->dateCreate = $dateCreate;
         $this->laps = new ArrayCollection();
     }
 
     /**
-     * @return Ulid
-     */
-    public function getUuid(): Ulid
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @param int $sessionNumber
+     * ƒобавить новое упражнение в базу
      *
-     * @return BreathingExercise
+     * @param BreathingExerciseRepositoryInterface $storage
+     *
+     * @return $this
      */
-    public function setSessionNumber(int $sessionNumber): BreathingExercise
+    public function save(BreathingExerciseRepositoryInterface $storage)
     {
-        $this->sessionNumber = $sessionNumber;
-
+        $storage->add($this);
         return $this;
-    }
-
-    /**
-     * @param DateInterval $duration
-     */
-    public function setDuration(DateInterval $duration): BreathingExercise
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
-    /**
-     * @return DateInterval
-     */
-    public function getDuration(): DateInterval
-    {
-        return $this->duration;
-    }
-
-    /**
-     * @return Collection<int, Lap>
-     */
-    public function getLaps(): Collection
-    {
-        return $this->laps;
     }
 
     public function addLap(Lap $lap): self
@@ -158,15 +126,64 @@ class BreathingExercise
     }
 
     /**
-     * @param DateTime $dateCreate
+     *
+     * ”становить новый пор€дковый номер упражнени€
      *
      * @return BreathingExercise
      */
-    public function setDateCreate(DateTime $dateCreate): BreathingExercise
+    public function assignNewSessionNumber(): BreathingExercise
     {
-        $this->dateCreate = $dateCreate;
+        //todo
 
         return $this;
+    }
+
+    /**
+     * @param int $sessionNumber
+     *
+     * @return BreathingExercise
+     */
+    public function setSessionNumber(int $sessionNumber): BreathingExercise
+    {
+        $this->sessionNumber = $sessionNumber;
+
+        return $this;
+    }
+
+    /**
+     * @param DateInterval $duration
+     *
+     * @return BreathingExercise
+     */
+    public function setDuration(DateInterval $duration): BreathingExercise
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * @return Ulid
+     */
+    public function getUuid(): Ulid
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @return DateInterval
+     */
+    public function getDuration(): DateInterval
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @return Collection<int, Lap>
+     */
+    public function getLaps(): Collection
+    {
+        return $this->laps;
     }
 
     /**
@@ -175,28 +192,5 @@ class BreathingExercise
     public function getUser(): User
     {
         return $this->user;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return BreathingExercise
-     */
-    public function setUser(User $user): BreathingExercise
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @param BreathingExerciseRepositoryInterface $storage
-     *
-     * @return $this
-     */
-    public function add(BreathingExerciseRepositoryInterface $storage)
-    {
-        $storage->add($this);
-        return $this;
     }
 }

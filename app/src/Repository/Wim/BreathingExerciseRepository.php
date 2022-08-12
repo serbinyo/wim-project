@@ -19,7 +19,7 @@ use App\Entity\Wim\Domain\Entity\Lap;
 use App\Entity\Wim\Domain\ValueObject\LapSet;
 use App\Repository\UserRepository;
 use App\Service\DateMaker;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -178,6 +178,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
         return new BreathingExercise(
             new Ulid(0),
             new User(),
+            new DateTimeImmutable()
         );
     }
 
@@ -242,8 +243,8 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
             $qb->andWhere('date_create <= :date_create')
                 ->setParameter(
                     'date_create',
-                    new DateTime($filter['date_create']),
-                    Types::DATETIME_MUTABLE
+                    new DateTimeImmutable($filter['date_create']),
+                    Types::DATETIME_IMMUTABLE
                 );
         }
 
@@ -260,11 +261,11 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
             (new User())
                 ->setId((int)$data['user_id'])
                 ->setEmail((string)$data['email'])
-                ->setName((string)$data['name'])
+                ->setName((string)$data['name']),
+            new DateTimeImmutable((string)$data['date_create'])
         );
         $set->setSessionNumber((int)$data['session_number']);
         $set->setDuration(DateMaker::intervalFromSeconds((float)$data['duration']));
-        $set->setDateCreate(new DateTime($data['date_create']));
 
         $this->loadLaps($set);
 
@@ -309,7 +310,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
      */
     private function lapFromArray(array $data): Lap
     {
-        $exerciseParams = new LapSet(
+        $lapSet = new LapSet(
             $data['breaths'],
             $data['exhale_hold'],
             $data['inhale_hold']
@@ -318,11 +319,10 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
         $lap = new Lap(
             new Ulid($data['id']),
             $data['number'],
-            $exerciseParams,
-            DateMaker::intervalFromSeconds((float)$data['time'])
+            $lapSet
         );
 
-        $lap->setDateCreate(new DateTime($data['date_create']));
+        $lap->setDateCreate(new DateTimeImmutable($data['date_create']));
 
         return $lap;
     }

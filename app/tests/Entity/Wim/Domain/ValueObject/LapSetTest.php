@@ -22,7 +22,9 @@ class LapSetTest extends TestCase
 
         #Упражнение шло 210 секунд
         $interval = $set->getLapTime();
+        $interval2 = $set->getLapTime();
 
         self::assertEquals($interval->s, 210);
+        self::assertEquals($interval2->s, 210);
     }
 }

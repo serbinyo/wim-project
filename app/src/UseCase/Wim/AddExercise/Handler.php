@@ -42,6 +42,7 @@ class Handler
         $newExercise = new BreathingExercise(
             new Ulid(),
             $user,
+            new \DateTimeImmutable()
         );
 
         /** @var LapDTO $lapDTO */

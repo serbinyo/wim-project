@@ -51,7 +51,7 @@ class LapSet
     private int $inhaleHold;
 
     /**
-     * @ORM\Column(type="dateInterval")
+     * @ORM\Column(type="string")
      */
     private ?DateInterval $time = null;
 
@@ -106,7 +106,9 @@ class LapSet
         return $this->time;
     }
 
-
+    /**
+     * Посчитать время круга
+     */
     private function countTime()
     {
         $duration = $this->breaths * self::BREATH_TIME + $this->exhaleHold + $this->inhaleHold;

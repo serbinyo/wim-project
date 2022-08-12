@@ -16,7 +16,7 @@ use App\Entity\Ulid;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Entity\Wim\Domain\ValueObject\LapSet;
 use DateInterval;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,11 +47,6 @@ class Lap
     private LapSet $set;
 
     /**
-     * @ORM\Column(type="string")
-     */
-    private DateInterval $time;
-
-    /**
      * @ORM\ManyToOne(targetEntity=BreathingExercise::class, inversedBy="laps")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -60,7 +55,7 @@ class Lap
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private DateTime $dateCreate;
+    private DateTimeImmutable $dateCreate;
 
 
     /**
@@ -106,19 +101,19 @@ class Lap
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeImmutable
      */
-    public function getDateCreate(): DateTime
+    public function getDateCreate(): DateTimeImmutable
     {
         return $this->dateCreate;
     }
 
     /**
-     * @param DateTime $dateCreate
+     * @param DateTimeImmutable $dateCreate
      *
      * @return Lap
      */
-    public function setDateCreate(DateTime $dateCreate): Lap
+    public function setDateCreate(DateTimeImmutable $dateCreate): Lap
     {
         $this->dateCreate = $dateCreate;
 
@@ -160,8 +155,8 @@ class Lap
     /**
      * @return DateInterval
      */
-    public function getTime(): DateInterval
+    public function getLapTime(): DateInterval
     {
-        return $this->set->getTime();
+        return $this->set->getLapTime();
     }
 }
