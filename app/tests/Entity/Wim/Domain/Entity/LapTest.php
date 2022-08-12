@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Entity\Wim\Domain\Entity;
 
 use App\Entity\Ulid;
 use App\Entity\Wim\Domain\Entity\Lap;
-use App\Entity\Wim\Domain\ValueObject\Exercise;
+use App\Entity\Wim\Domain\ValueObject\LapSet;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,7 +19,7 @@ class LapTest extends TestCase
     {
         $uuid = '3a43f85b-28e4-48a8-b9cc-4f6bfc7e4f62';
         $number = 1;
-        $exercise = new Exercise(
+        $set = new LapSet(
             30,
             60,
             15
@@ -25,12 +27,12 @@ class LapTest extends TestCase
         $lap = new Lap(
             new Ulid($uuid),
             $number,
-            $exercise
+            $set
         );
 
         self::assertEquals($uuid, $lap->getUuid()->getUlid());
         self::assertEquals($number, $lap->getNumber());
-        self::assertEquals($exercise, new Exercise(
+        self::assertEquals($set, new LapSet(
             $lap->getBreaths(),
             $lap->getExhaleHold(),
             $lap->getInhaleHold()

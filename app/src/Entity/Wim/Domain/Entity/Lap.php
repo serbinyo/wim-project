@@ -14,7 +14,7 @@ namespace App\Entity\Wim\Domain\Entity;
 
 use App\Entity\Ulid;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
-use App\Entity\Wim\Domain\ValueObject\Exercise;
+use App\Entity\Wim\Domain\ValueObject\LapSet;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -42,9 +42,9 @@ class Lap
     private int $number;
 
     /**
-     * @Embedded(class=Exercise::class)
+     * @Embedded(class=LapSet::class)
      */
-    private Exercise $exercise;
+    private LapSet $set;
 
     /**
      * @ORM\Column(type="string")
@@ -66,15 +66,15 @@ class Lap
     /**
      * Lap constructor.
      *
-     * @param Ulid     $uuid
-     * @param int      $number
-     * @param Exercise $exercise
+     * @param Ulid   $uuid
+     * @param int    $number
+     * @param LapSet $set
      */
-    public function __construct(Ulid $uuid, int $number, Exercise $exercise)
+    public function __construct(Ulid $uuid, int $number, LapSet $set)
     {
         $this->uuid = $uuid;
         $this->number = $number;
-        $this->exercise = $exercise;
+        $this->set = $set;
     }
 
     /**
@@ -138,7 +138,7 @@ class Lap
      */
     public function getBreaths(): int
     {
-        return $this->exercise->getBreaths();
+        return $this->set->getBreaths();
     }
 
     /**
@@ -146,7 +146,7 @@ class Lap
      */
     public function getExhaleHold(): int
     {
-        return $this->exercise->getExhaleHold();
+        return $this->set->getExhaleHold();
     }
 
     /**
@@ -154,7 +154,7 @@ class Lap
      */
     public function getInhaleHold(): int
     {
-        return $this->exercise->getInhaleHold();
+        return $this->set->getInhaleHold();
     }
 
     /**
@@ -162,6 +162,6 @@ class Lap
      */
     public function getTime(): DateInterval
     {
-        return $this->exercise->getTime();
+        return $this->set->getTime();
     }
 }

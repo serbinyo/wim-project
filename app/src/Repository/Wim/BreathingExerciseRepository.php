@@ -16,7 +16,7 @@ use App\Entity\Ulid;
 use App\Entity\User;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Entity\Wim\Domain\Entity\Lap;
-use App\Entity\Wim\Domain\ValueObject\Exercise;
+use App\Entity\Wim\Domain\ValueObject\LapSet;
 use App\Repository\UserRepository;
 use App\Service\DateMaker;
 use DateTime;
@@ -255,20 +255,20 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
      */
     private function fromArray(array $data): BreathingExercise
     {
-        $exercise = new BreathingExercise(
+        $set = new BreathingExercise(
             new Ulid($data['id']),
             (new User())
                 ->setId((int)$data['user_id'])
                 ->setEmail((string)$data['email'])
                 ->setName((string)$data['name'])
         );
-        $exercise->setSessionNumber((int)$data['session_number']);
-        $exercise->setDuration(DateMaker::intervalFromSeconds((float)$data['duration']));
-        $exercise->setDateCreate(new DateTime($data['date_create']));
+        $set->setSessionNumber((int)$data['session_number']);
+        $set->setDuration(DateMaker::intervalFromSeconds((float)$data['duration']));
+        $set->setDateCreate(new DateTime($data['date_create']));
 
-        $this->loadLaps($exercise);
+        $this->loadLaps($set);
 
-        return $exercise;
+        return $set;
     }
 
     /**
@@ -309,7 +309,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
      */
     private function lapFromArray(array $data): Lap
     {
-        $exerciseParams = new Exercise(
+        $exerciseParams = new LapSet(
             $data['breaths'],
             $data['exhale_hold'],
             $data['inhale_hold']

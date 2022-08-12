@@ -8,7 +8,7 @@ use App\DTO\Wim\LapDTO;
 use App\Entity\Ulid;
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Entity\Wim\Domain\Entity\Lap;
-use App\Entity\Wim\Domain\ValueObject\Exercise;
+use App\Entity\Wim\Domain\ValueObject\LapSet;
 use App\Repository\Wim\BreathingExerciseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -49,7 +49,7 @@ class Handler
             $lap = new Lap(
                 new Ulid(),
                 $lapDTO->number,
-                new Exercise(
+                new LapSet(
                     $lapDTO->breaths,
                     $lapDTO->waitingTime,
                     $lapDTO->inhaleHold

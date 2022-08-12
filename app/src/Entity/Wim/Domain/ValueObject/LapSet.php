@@ -16,13 +16,13 @@ use App\Service\DateMaker;
 use DateInterval;
 
 /**
- * Class Exercise
+ * Class LapSet
  *
  * Выполненное упражнение на одном круге
  *
  * @package App\Entity\Wim\Domain\ValueObject
  */
-class Exercise
+class LapSet
 {
     /**
      * Время на один вдох
@@ -57,7 +57,7 @@ class Exercise
 
 
     /**
-     * Exercise constructor.
+     * LapSet constructor.
      *
      * @param int $breaths
      * @param int $exhaleHold

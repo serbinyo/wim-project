@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Entity\Wim\Domain\ValueObject;
 
-use App\Entity\Wim\Domain\ValueObject\Exercise;
+use App\Entity\Wim\Domain\ValueObject\LapSet;
 use PHPUnit\Framework\TestCase;
 
 /**
  *
  */
-class ExerciseTest extends TestCase
+class LapSetTest extends TestCase
 {
     public function test_get_lap_time()
     {
-        $exercise = new Exercise(
+        $set = new LapSet(
             30,
             60,
             15
         );
 
         #Упражнение шло 210 секунд
-        $interval = $exercise->getLapTime();
+        $interval = $set->getLapTime();
 
         self::assertEquals($interval->s, 210);
     }
