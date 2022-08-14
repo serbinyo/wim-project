@@ -48,7 +48,7 @@ class BreathingExercise
     /**
      * @ORM\Column(type="integer")
      */
-    private int $sessionNumber;
+    private ?int $sessionNumber = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="breathingExercises")
@@ -211,5 +211,13 @@ class BreathingExercise
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSessionNumber(): ?int
+    {
+        return $this->sessionNumber;
     }
 }

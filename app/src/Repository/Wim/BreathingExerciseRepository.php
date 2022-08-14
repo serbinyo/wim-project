@@ -191,7 +191,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
                 ->setParameters([
                     'id'             => $breathingExercise->getUuid()->getUlid(),
                     'user_id'        => $breathingExercise->getUser()->getId(),
-                    'session_number' => 999,
+                    'session_number' => $breathingExercise->getSessionNumber(),
                     'duration'       => $breathingExercise->getDuration()->s,
                     'date_create'    => $dateCreate
                 ])
