@@ -46,13 +46,16 @@ class BreathingExercise extends AbstractController
     #[Route('/breath/add', name: 'addBreathExercise', methods: ['POST'])]
     public function add(Request $request, Handler $handler, UserInterface $user)
     {
+        #1. Инициализируем DTO
         $laps = $this->deserializer->jsonCollectionToObjectCollection(
             $request->request->get('laps'),
             LapDTO::class
         );
 
+        #2. Инициализируем команду
         $command = new Command($user, $laps);
 
+        #3. передаем команду в сценарий. Выполняем операцию.
         $handler->handle($command);
 
         return $this->json($laps, Response::HTTP_CREATED, [], []);

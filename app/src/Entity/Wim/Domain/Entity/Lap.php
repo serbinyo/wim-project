@@ -17,6 +17,7 @@ use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Entity\Wim\Domain\ValueObject\LapSet;
 use DateInterval;
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

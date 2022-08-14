@@ -14,6 +14,8 @@ namespace App\Entity\Wim\Domain\ValueObject;
 
 use App\Service\DateMaker;
 use DateInterval;
+use Doctrine\ORM\Mapping\Embeddable;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class LapSet
@@ -21,6 +23,7 @@ use DateInterval;
  * Выполненное упражнение на одном круге
  *
  * @package App\Entity\Wim\Domain\ValueObject
+ * @Embeddable
  */
 class LapSet
 {
