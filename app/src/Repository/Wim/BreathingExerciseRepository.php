@@ -176,16 +176,58 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
         // $conn instanceof Doctrine\DBAL\Connection
         $connection->beginTransaction(); // 0 => 1, "real" transaction started
         try {
+            //logic
+            $qb = $this->entityManager->getConnection()->createQueryBuilder();
+            $dateCreate = (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
+            $qb->insert(self::TABLE)
+                ->values([
+                    'id'             => ':id',
+                    'user_id'        => ':user_id',
+                    'session_number' => ':session_number',
+                    'duration'       => ':duration',
+                    'date_create'    => ':date_create'
+                ])
+                ->setParameters([
+                    'id'             => $breathingExercise->getUuid()->getUlid(),
+                    'user_id'        => $breathingExercise->getUser()->getId(),
+                    'session_number' => 999,
+                    'duration'       => $breathingExercise->getDuration()->s,
+                    'date_create'    => $dateCreate
+                ])
+                ->executeStatement();
 
+            /** @var Lap $lap */
+            foreach ($breathingExercise->getLaps() as $lap) {
+                $qb->insert(self::TABLE_LAP)
+                    ->values([
+                        'id'                    => ':id',
+                        'breathing_exercise_id' => ':be_id',
+                        'number'                => ':number',
+                        'date_create'           => ':date_create',
+                        'breaths'               => ':breaths',
+                        'exhale_hold'           => ':exhale_hold',
+                        'inhale_hold'           => ':inhale_hold',
+                        'time'                  => ':time',
+                    ])
+                    ->setParameters([
+                        'id'          => $lap->getUuid()->getUlid(),
+                        'be_id'       => $breathingExercise->getUuid()->getUlid(),
+                        'number'      => $lap->getNumber(),
+                        'date_create' => $dateCreate,
+                        'breaths'     => $lap->getBreaths(),
+                        'exhale_hold' => $lap->getExhaleHold(),
+                        'inhale_hold' => $lap->getInhaleHold(),
+                        'time'        => $lap->getLapTime()->s,
+                    ])
+                    ->executeStatement();
+            }
 
             $connection->commit(); // 1 => 0, "real" transaction committed
         } catch (\Exception $e) {
             $connection->rollBack(); // 1 => 0, "real" transaction rollback
             throw $e;
         }
-
-
 
         return $breathingExercise;
     }
@@ -282,7 +324,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
             new DateTimeImmutable((string)$data['date_create'])
         );
         $set->setSessionNumber((int)$data['session_number']);
-        $set->setDuration(DateMaker::intervalFromSeconds((float)$data['duration']));
+        $set->setDuration(DateMaker::intervalFromSeconds((int)$data['duration']));
 
         $this->loadLaps($set);
 

@@ -67,7 +67,7 @@ class BreathingExercise
     /**
      * @ORM\Column(type="string")
      */
-    private DateInterval $duration;
+    private ?DateInterval $duration = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -77,7 +77,7 @@ class BreathingExercise
     /**
      * BreathingExercise constructor.
      *
-     * @param Ulid $uuid
+     * @param Ulid          $uuid
      * @param UserInterface $user
      */
     public function __construct(Ulid $uuid, UserInterface $user, DateTimeImmutable $dateCreate)
@@ -89,7 +89,7 @@ class BreathingExercise
     }
 
     /**
-     * �������� ����� ���������� � ����
+     * Добавить новое упражнение в базу
      *
      * @param BreathingExerciseRepositoryInterface $storage
      *
@@ -97,13 +97,27 @@ class BreathingExercise
      */
     public function save(BreathingExerciseRepositoryInterface $storage)
     {
+        if ($this->laps->isEmpty()) {
+            throw new \RuntimeException('Невозможно сохранить упражнение без единого круга');
+        }
+
+        if ($this->getDuration()->s === 0) {
+            throw new \RuntimeException('Невозможно сохранить упражнение нулевой продолжительности');
+        }
+
         $storage->add($this);
+
         return $this;
     }
 
     public function addLap(Lap $lap): self
     {
         if (!$this->laps->contains($lap)) {
+
+            if ($lap->getLapTime()->s === 0) {
+                throw new \RuntimeException('Невозможно добавить пустой круг');
+            }
+
             $this->laps[] = $lap;
             $lap->setBreathingExercise($this);
         }
@@ -116,18 +130,19 @@ class BreathingExercise
      */
     public function countDuration()
     {
-        $duration = DateMaker::intervalEmpty();
+        $seconds = 0;
 
+        /** @var Lap $lap */
         foreach ($this->laps as $lap) {
-            $duration += $lap->getTime();
+            $seconds += $lap->getLapTime()->s;
         }
 
-        $this->duration = $duration;
+        $this->duration = DateMaker::intervalFromSeconds((int)$seconds);
     }
 
     /**
      *
-     * ���������� ����� ���������� ����� ����������
+     * Установить новый порядковый номер упражнения
      *
      * @return BreathingExercise
      */
@@ -175,6 +190,10 @@ class BreathingExercise
      */
     public function getDuration(): DateInterval
     {
+        if ($this->duration === null) {
+            $this->countDuration();
+        }
+
         return $this->duration;
     }
 

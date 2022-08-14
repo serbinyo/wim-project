@@ -56,9 +56,9 @@ class BreathingExercise extends AbstractController
         $command = new Command($user, $laps);
 
         #3. передаем команду в сценарий. Выполняем операцию.
-        $handler->handle($command);
+        $newExercise = $handler->handle($command);
 
-        return $this->json($laps, Response::HTTP_CREATED, [], []);
+        return $this->json(['result' => true], Response::HTTP_CREATED, [], []);
     }
 
 }

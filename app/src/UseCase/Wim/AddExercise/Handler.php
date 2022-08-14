@@ -60,9 +60,8 @@ class Handler
             $newExercise->addLap($lap);
         }
 
-        $newExercise->save($this->breathingExerciseRepository);
+        $result = $newExercise->save($this->breathingExerciseRepository);
 
-
-        echo '<pre>';print_r('addExercise');echo '</pre>';die;
+        return $result;
     }
 }

@@ -11,7 +11,7 @@ use DateInterval;
  */
 class DateMaker
 {
-    public static function intervalFromSeconds(float $seconds) : DateInterval
+    public static function intervalFromSeconds(int $seconds) : DateInterval
     {
         return DateInterval::createFromDateString($seconds . ' seconds');
     }

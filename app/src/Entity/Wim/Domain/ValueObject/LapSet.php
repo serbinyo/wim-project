@@ -115,6 +115,6 @@ class LapSet
     private function countTime()
     {
         $duration = $this->breaths * self::BREATH_TIME + $this->exhaleHold + $this->inhaleHold;
-        $this->time = DateMaker::intervalFromSeconds($duration);
+        $this->time = DateMaker::intervalFromSeconds((int)$duration);
     }
 }
