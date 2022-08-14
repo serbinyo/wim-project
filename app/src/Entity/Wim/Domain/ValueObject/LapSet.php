@@ -35,21 +35,21 @@ class LapSet
     /**
      * @var int Количество дыханий
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="breaths", type="integer")
      */
     private int $breaths;
 
     /**
      * @var int Задержка на выдохе
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="exhale_hold", type="integer")
      */
     private int $exhaleHold;
 
     /**
      * @var int Задержка на вдохе
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="inhale_hold", type="integer")
      */
     private int $inhaleHold;
 

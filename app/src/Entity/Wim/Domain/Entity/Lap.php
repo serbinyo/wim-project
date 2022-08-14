@@ -43,7 +43,7 @@ class Lap
     private int $number;
 
     /**
-     * @Embedded(class=LapSet::class)
+     * @Embedded(class=LapSet::class, columnPrefix=false)
      */
     private LapSet $set;
 
