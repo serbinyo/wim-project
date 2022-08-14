@@ -105,6 +105,10 @@ class BreathingExercise
             throw new \RuntimeException('Невозможно сохранить упражнение нулевой продолжительности');
         }
 
+        if ($this->getSessionNumber() === null) {
+            throw new \RuntimeException('Невозможно сохранить упражнение без порядкового номера');
+        }
+
         $storage->add($this);
 
         return $this;
