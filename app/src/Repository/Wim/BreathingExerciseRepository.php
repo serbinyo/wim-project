@@ -166,9 +166,26 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
         return $collection;
     }
 
+    /**
+     * @throws Exception
+     */
     public function add(BreathingExercise $breathingExercise): BreathingExercise
     {
-        $qb = $this->entityManager->getConnection()->createQueryBuilder();
+        $connection = $this->entityManager->getConnection();
+
+        // $conn instanceof Doctrine\DBAL\Connection
+        $connection->beginTransaction(); // 0 => 1, "real" transaction started
+        try {
+
+
+
+            $connection->commit(); // 1 => 0, "real" transaction committed
+        } catch (\Exception $e) {
+            $connection->rollBack(); // 1 => 0, "real" transaction rollback
+            throw $e;
+        }
+
+
 
         return $breathingExercise;
     }
