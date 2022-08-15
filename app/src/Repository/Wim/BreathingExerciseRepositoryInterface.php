@@ -34,6 +34,10 @@ interface BreathingExerciseRepositoryInterface
 
     public function findBy(array $filter): ArrayCollection;
 
+    public function remove(string $id): bool;
+
+    public function removeBy(array $filter): bool;
+
     public function getEmptyObject(): BreathingExercise;
 
     public function add(BreathingExercise $breathingExercise): BreathingExercise;

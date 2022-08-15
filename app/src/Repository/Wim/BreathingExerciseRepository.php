@@ -158,7 +158,13 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
         return $collection;
     }
 
-    public function remove(string $id)
+    /**
+     * @param string $id
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function remove(string $id): bool
     {
         $filter['id'] = $id;
 
@@ -171,7 +177,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
      * @return bool
      * @throws Exception
      */
-    public function removeBy(array $filter)
+    public function removeBy(array $filter): bool
     {
         $result = false;
 
