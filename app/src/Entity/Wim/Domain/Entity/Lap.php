@@ -160,4 +160,12 @@ class Lap
     {
         return $this->set->getLapTime();
     }
+
+    /**
+     * @return LapSet
+     */
+    public function getSet(): LapSet
+    {
+        return $this->set;
+    }
 }

@@ -65,11 +65,6 @@ class BreathingExercise
     private ArrayCollection $laps;
 
     /**
-     * @ORM\Column(type="string")
-     */
-    private ?DateInterval $duration = null;
-
-    /**
      * @ORM\Column(type="datetime", nullable=false)
      */
     private DateTimeImmutable $dateCreate;
@@ -126,6 +121,8 @@ class BreathingExercise
             $lap->setBreathingExercise($this);
         }
 
+        $this->countDuration();
+
         return $this;
     }
 
@@ -141,7 +138,7 @@ class BreathingExercise
             $seconds += $lap->getLapTime()->s;
         }
 
-        $this->duration = DateMaker::intervalFromSeconds((int)$seconds);
+        return DateMaker::intervalFromSeconds((int)$seconds);
     }
 
     /**
@@ -170,18 +167,6 @@ class BreathingExercise
     }
 
     /**
-     * @param DateInterval $duration
-     *
-     * @return BreathingExercise
-     */
-    public function setDuration(DateInterval $duration): BreathingExercise
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
-    /**
      * @return Ulid
      */
     public function getUuid(): Ulid
@@ -194,11 +179,7 @@ class BreathingExercise
      */
     public function getDuration(): DateInterval
     {
-        if ($this->duration === null) {
-            $this->countDuration();
-        }
-
-        return $this->duration;
+        return $this->countDuration();
     }
 
     /**
@@ -223,5 +204,13 @@ class BreathingExercise
     public function getSessionNumber(): ?int
     {
         return $this->sessionNumber;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->getUuid()->getUlid() === '00000000-0000-0000-0000-000000000000';
     }
 }

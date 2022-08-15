@@ -18,7 +18,6 @@ use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use App\Entity\Wim\Domain\Entity\Lap;
 use App\Entity\Wim\Domain\ValueObject\LapSet;
 use App\Repository\UserRepository;
-use App\Service\DateMaker;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
@@ -74,24 +73,17 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
     }
 
     /**
-     * @param $id
+     * @param string $id
      *
      * @return BreathingExercise
      * @throws Exception
      */
-    public function find($id): BreathingExercise
+    public function find(string $id): BreathingExercise
     {
-        $result = $this->getEmptyObject();
         $filter['limit'] = 1;
         $filter['id'] = $id;
 
-        $collection = $this->findBy($filter);
-
-        if (!$collection->isEmpty()) {
-            $result = $collection->first();
-        }
-
-        return $result;
+        return $this->findOneBy($filter);
     }
 
     /**
@@ -164,6 +156,58 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
         }
 
         return $collection;
+    }
+
+    public function remove(string $id)
+    {
+        $filter['id'] = $id;
+
+        return $this->removeBy($filter);
+    }
+
+    /**
+     * @param array $filter
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function removeBy(array $filter)
+    {
+        $result = false;
+
+        $exercise = $this->findOneBy($filter);
+
+        if (!$exercise->isEmpty()) {
+            $connection = $this->entityManager->getConnection();
+
+            // $conn instanceof Doctrine\DBAL\Connection
+            $connection->beginTransaction(); // 0 => 1, "real" transaction started
+            try {
+                //logic
+                $qb = $this->entityManager->getConnection()->createQueryBuilder();
+
+                /** @var Lap $lap */
+                foreach ($exercise->getLaps() as $lap) {
+                    $qb->delete(self::TABLE_LAP)
+                        ->where('id = :id')
+                        ->setParameter('id', $lap->getUuid()->getUlid())
+                        ->executeStatement();
+                }
+
+                $qb->delete(self::TABLE)
+                    ->where('id = :id')
+                    ->setParameter('id', $exercise->getUuid()->getUlid())
+                    ->executeStatement();
+
+                $connection->commit(); // 1 => 0, "real" transaction committed
+                $result = true;
+            } catch (\Exception $e) {
+                $connection->rollBack(); // 1 => 0, "real" transaction rollback
+                throw $e;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -315,7 +359,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
      */
     private function fromArray(array $data): BreathingExercise
     {
-        $set = new BreathingExercise(
+        $exercise = new BreathingExercise(
             new Ulid($data['id']),
             (new User())
                 ->setId((int)$data['user_id'])
@@ -323,12 +367,11 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
                 ->setName((string)$data['name']),
             new DateTimeImmutable((string)$data['date_create'])
         );
-        $set->setSessionNumber((int)$data['session_number']);
-        $set->setDuration(DateMaker::intervalFromSeconds((int)$data['duration']));
+        $exercise->setSessionNumber((int)$data['session_number']);
 
-        $this->loadLaps($set);
+        $this->loadLaps($exercise);
 
-        return $set;
+        return $exercise;
     }
 
     /**

@@ -26,7 +26,7 @@ interface BreathingExerciseRepositoryInterface
     /**
      *
      */
-    public function find($id): BreathingExercise;
+    public function find(string $id): BreathingExercise;
 
     public function findOneBy(array $criteria): BreathingExercise;
 
