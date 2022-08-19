@@ -32,7 +32,6 @@ class BreathingExerciseBuilder
                 ->setName('Вим Хоф'),
             new DateTimeImmutable('9999-12-31')
         );
-        $exercise->setSessionNumber(1);
 
         $exercise->addLap(LapBuilder::buildTestObject());
 

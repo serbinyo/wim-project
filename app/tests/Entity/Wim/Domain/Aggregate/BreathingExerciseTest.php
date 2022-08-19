@@ -28,10 +28,6 @@ class BreathingExerciseTest extends KernelTestCase
         $this->exercise = BreathingExerciseBuilder::buildTestObject();
     }
 
-    public function testAssignNewSessionNumber()
-    {
-    }
-
     public function testCountDuration()
     {
         $exercise = $this->exercise;

@@ -101,7 +101,8 @@ class BreathingExercise
         }
 
         if ($this->getSessionNumber() === null) {
-            throw new \RuntimeException('Невозможно сохранить упражнение без порядкового номера');
+            $newSessionNumber = $storage->countUserExercise($this->getUser()) + 1;
+            $this->setSessionNumber($newSessionNumber);
         }
 
         $storage->add($this);
@@ -139,19 +140,6 @@ class BreathingExercise
         }
 
         return DateMaker::intervalFromSeconds((int)$seconds);
-    }
-
-    /**
-     *
-     * Установить новый порядковый номер упражнения
-     *
-     * @return BreathingExercise
-     */
-    public function assignNewSessionNumber(): BreathingExercise
-    {
-        //todo
-
-        return $this;
     }
 
     /**
@@ -196,6 +184,11 @@ class BreathingExercise
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
     }
 
     /**

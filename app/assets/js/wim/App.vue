@@ -143,6 +143,7 @@ export default {
                 //упражнение закончено
                 this.noSleepEnd();
                 this.isExercise = false;
+                this.addResult();
 
                 this.message = 'Молодец!';
             }

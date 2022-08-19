@@ -83,17 +83,19 @@ export class Timer {
 
 
     runTimer() {
-        this.timerInterval = setInterval(() => {
-            this.timePassed = this.timePassed += 1;
-            this.timeLeft = this.TIME_LIMIT - this.timePassed;
-            document.getElementById(`base-timer-label-${this.domElement}`).innerHTML = this.formatTime(
-                this.timeLeft
-            );
-            this.setCircleDasharray();
-            this.setRemainingPathColor(this.timeLeft);
+        let that = this;
 
-            if (this.timeLeft === 0) {
-                this.onTimesUp();
+        this.timerInterval = setInterval(() => {
+            that.timePassed = that.timePassed += 1;
+            that.timeLeft = that.TIME_LIMIT - that.timePassed;
+            document.getElementById(`base-timer-label-${that.domElement}`).innerHTML = that.formatTime(
+                that.timeLeft
+            );
+            that.setCircleDasharray();
+            that.setRemainingPathColor(that.timeLeft);
+
+            if (that.timeLeft === 0) {
+                that.onTimesUp();
             }
         }, 1000);
 

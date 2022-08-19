@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Repository\Wim;
 
+use App\Repository\UserRepository;
 use App\Repository\Wim\BreathingExerciseRepository;
 use App\Service\Builder\Entity\Wim\Domain\Aggregate\BreathingExerciseBuilder;
 use Doctrine\ORM\EntityManagerInterface;
@@ -109,6 +110,19 @@ class BreathingExerciseRepositoryTest extends KernelTestCase
         $after = $breathingExerciseRepository->findAll()->count();
 
         self::assertEquals($after, $before -1);
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function testUserExercisesCount()
+    {
+        $user = (UserRepository::getEmptyObject())->setId(1);
+
+        $breathingExerciseRepository = $this->getStorage();
+        $count = $breathingExerciseRepository->countUserExercise($user);
+
+        self::assertEquals($count, 2);
     }
 
 

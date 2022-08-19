@@ -14,6 +14,7 @@ namespace App\Repository\Wim;
 
 use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Interface BreathingExerciseRepositoryInterface
@@ -41,4 +42,6 @@ interface BreathingExerciseRepositoryInterface
     public function getEmptyObject(): BreathingExercise;
 
     public function add(BreathingExercise $breathingExercise): BreathingExercise;
+
+    public function countUserExercise(UserInterface $user): int;
 }

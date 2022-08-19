@@ -25,6 +25,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class BreathingExerciseRepository
@@ -280,6 +281,21 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
         }
 
         return $breathingExercise;
+    }
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return int
+     * @throws Exception
+     */
+    public function countUserExercise(UserInterface $user): int
+    {
+        return $this->findBy(
+            [
+                ['user_id' => $user->getId()]
+            ]
+        )->count();
     }
 
     public function getEmptyObject(): BreathingExercise
