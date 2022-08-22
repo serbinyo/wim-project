@@ -1,27 +1,30 @@
 <template>
+    <div class="card">
+        <div class="row row-bordered g-0">
+            <div class="col-md-8">
+                <h5 class="card-header m-0 me-2 pb-3">Упражнение</h5>
+                <div class="px-2 text-center">
+                    <div class="canvas" v-if="isExercise">
+                        <inhale-exhale v-if="isBreathingPhase"></inhale-exhale>
 
-    <div>
-        <lap-settings @start="start" :startExercise="start" v-if="isSettings"></lap-settings>
-
-        <div v-else-if="isExercise">
-            <div class="canvas">
-                <inhale-exhale v-if="isBreathingPhase"></inhale-exhale>
-
-                <div v-show="!isBreathingPhase" class="breathing-phase">
-                    <div id="timer"></div>
+                        <div v-show="!isBreathingPhase" class="breathing-phase">
+                            <div id="timer"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <speech>{{ message }}</speech>
+            <div class="col-md-4">
+                <div class="card-body">
+                    <div class="text-center">
+                        <lap-settings @start="start" :startExercise="start" v-if="isSettings"></lap-settings>
+                        <div v-else>
+                            <speech>{{ message }}</speech>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div v-else>
-            <speech>{{ message }}</speech>
-        </div>
-
-        <br>
-        <button @click.prevent="addResult">save</button>
     </div>
-
 
 </template>
 
@@ -63,7 +66,6 @@ export default {
     }),
     methods   : {
         start(laps) {
-            console.log(this.INHALE_TIME)
             this.laps = laps;
 
             this.isSettings = false;
@@ -181,11 +183,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-.canvas {
-    height: 300px;
-}
-
-</style>
