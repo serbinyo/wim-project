@@ -59,7 +59,7 @@
         <!-- Menu -->
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
             <div class="app-brand demo">
-                <a href="index.html" class="app-brand-link">
+                <a href="/" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <svg
                         width="25"
@@ -143,8 +143,7 @@
                     </a>
                 </li>
 
-                {% if app.user %}
-                    <!-- Layouts -->
+                {% if app.user and ('ROLE_ADMIN' in app.user.roles) %}
                     <li class="menu-item {% if url('chat') == app.request.uri %} active {% endif %}">
                         <a href="{{ path('chat') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-chat"></i>
@@ -152,6 +151,7 @@
                         </a>
                     </li>
                 {% endif %}
+
             </ul>
         </aside>
         <!-- / Menu -->
@@ -205,7 +205,7 @@
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                                    data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle"/>
+                                        <img src="/assets/img/avatars/avatar.jpg" alt class="w-px-40 h-auto rounded-circle"/>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -214,7 +214,7 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="/assets/img/avatars/1.png" alt
+                                                        <img src="/assets/img/avatars/avatar.jpg" alt
                                                              class="w-px-40 h-auto rounded-circle"/>
                                                     </div>
                                                 </div>
@@ -235,21 +235,6 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bx bx-cog me-2"></i>
-                                            <span class="align-middle">Настройки</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <span class="d-flex align-items-center align-middle">
-                                              <i class="flex-shrink-0 bx message-rounded me-2"></i>
-                                              <span class="flex-grow-1 align-middle">Уведомления</span>
-                                              <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
@@ -265,7 +250,7 @@
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                                    data-bs-toggle="dropdown">
                                     <div class="avatar avatar-offline">
-                                        <img src="/assets/img/avatars/7.png" alt class="w-px-40 h-auto rounded-circle"/>
+                                        <img src="/assets/img/avatars/avatar.jpg" alt class="w-px-40 h-auto rounded-circle"/>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -328,6 +313,8 @@
 </div>
 <!-- / Layout wrapper -->
 
+<!--
+//Кнопка
 <div class="buy-now">
     <a
             href="{{ path('app_login') }}"
@@ -335,7 +322,7 @@
             class="btn btn-danger btn-buy-now"
     >Вход</a
     >
-</div>
+</div>-->
 
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->

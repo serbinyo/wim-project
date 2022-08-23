@@ -28,8 +28,6 @@
             <button class="btn" @click="addLap">Добавить круг</button>
             <button class="btn btn-primary" @click="start">Старт</button>
         </div>
-
-
     </div>
 </template>
 
@@ -37,6 +35,8 @@
 
 import useVuelidate from '@vuelidate/core'
 import { helpers, noEmptyLapSettings  } from '../classes/Vuelidate/Validators'
+
+const INHALE_TIME = 15;
 
 export default {
     setup () {
@@ -46,18 +46,25 @@ export default {
         'startExercise'
     ],
     data: () => ({
+        INHALE_TIME: INHALE_TIME,
         laps    : [
             {
+                number: 1,
                 breaths : 30,
-                waitingTime : 30
+                waitingTime : 30,
+                inhaleHold : INHALE_TIME
             },
             {
-                breaths : 30,
-                waitingTime : 60
+                number: 2,
+                breaths : 28,
+                waitingTime : 60,
+                inhaleHold : INHALE_TIME
             },
             {
-                breaths : 30,
-                waitingTime : 90
+                number: 3,
+                breaths : 26,
+                waitingTime : 90,
+                inhaleHold : INHALE_TIME
             }
         ],
     }),
@@ -71,8 +78,10 @@ export default {
     methods: {
         addLap() {
             this.laps.push({
+                number: this.laps.length + 1,
                 breaths : '',
-                waitingTime : ''
+                waitingTime : '',
+                inhaleHold : INHALE_TIME
             });
         },
         async start () {

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Wim\Domain\Aggregate\BreathingExercise;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -29,7 +30,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private $id = 0;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -67,9 +68,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $enabled;
 
     /**
-     * @ORM\OneToMany(targetEntity=Breathing::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=BreathingExercise::class, mappedBy="user", orphanRemoval=true)
      */
-    private $breathings;
+    private $breathingExercises;
 
     /**
      * User constructor.
@@ -78,13 +79,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->roles = [self::ROLE_USER];
         $this->enabled = false;
-        $this->breathings = new ArrayCollection();
+        $this->breathingExercises = new ArrayCollection();
     }
 
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return User
+     */
+    public function setId(int $id): User
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -106,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -114,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -242,32 +255,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Breathing>
+     * @return Collection<int, BreathingExercise>
      */
-    public function getBreathings(): Collection
+    public function getBreathingExercises(): Collection
     {
-        return $this->breathings;
+        return $this->breathingExercises;
     }
 
-    public function addBreathing(Breathing $breathing): self
+    public function addBreathing(BreathingExercise $breathingExercise): self
     {
-        if (!$this->breathings->contains($breathing)) {
-            $this->breathings[] = $breathing;
-            $breathing->setUserId($this);
+        if (!$this->breathingExercises->contains($breathingExercise)) {
+            $this->breathingExercises[] = $breathingExercise;
+            $breathingExercise->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeBreathing(Breathing $breathing): self
+    public function __toString(): string
     {
-        if ($this->breathings->removeElement($breathing)) {
-            // set the owning side to null (unless already changed)
-            if ($breathing->getUserId() === $this) {
-                $breathing->setUserId(null);
-            }
-        }
-
-        return $this;
+        return 'id:' . $this->id . ' ' . $this->email;
     }
 }
