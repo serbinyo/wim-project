@@ -19,9 +19,9 @@
                              alt="You did it" class="rounded mb-5">
                     </div>
                     <div v-else>
-                        <speech>
+                        <p>
                             Удели 15 минут, что бы тебя никто не отвлекал и попробуй сейчас
-                        </speech>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -126,9 +126,25 @@ export default {
             default: '/assets/audio/wim/default-ru.mp3'
         },
         //стандартные настройки
-        defaultSetting: true
+        defaultSetting : true,
+        user_authorized: null
     }),
-    methods   : {
+    mounted() {
+        let that = this;
+
+        axios.get(
+            '/user/check'
+        )
+            .then(function (response) {
+                // handle success
+                if (200 === response.status) {
+                    that.user_authorized = response.data.result;
+                } else {
+                    console.error()
+                }
+            })
+    },
+    methods: {
         start(laps) {
             this.laps = laps;
 
@@ -233,17 +249,20 @@ export default {
             clearInterval(this.intervalObject);
         },
         addResult() {
-            let data = new FormData();
-            data.append('laps', JSON.stringify(this.laps));
-
-            axios.post(
-                '/breath/add',
-                data
-            )
-                .then(function (response) {
-                    // handle success
-                    console.log(response);
-                })
+            if (true === this.user_authorized) {
+                let data = new FormData();
+                data.append('laps', JSON.stringify(this.laps));
+                axios.post(
+                    '/breath/add',
+                    data
+                )
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                    })
+            } else {
+                alert('Зарегистрируйтесь, что бы ваш прогресс сохранялся')
+            }
         },
     }
 }
