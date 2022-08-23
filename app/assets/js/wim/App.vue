@@ -18,11 +18,7 @@
                         <img src="/assets/img/elements/fi-success.png"
                              alt="You did it" class="rounded mb-5">
                     </div>
-                    <div v-else>
-                        <p>
-                            Удели 15 минут, что бы тебя никто не отвлекал и попробуй сейчас
-                        </p>
-                    </div>
+                    <div v-else v-html="display"></div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -118,6 +114,7 @@ export default {
         n               : 0,
         noSleepLock     : new NoSleep(),
         message         : '',
+        display         : '<p>Удели 15 минут, что бы тебя никто не отвлекал и попробуй сейчас</p>',
         intervalObject  : null,
         //Время задержки дыхания на вдохе
         INHALE_TIME: INHALE_TIME,
@@ -249,6 +246,7 @@ export default {
             clearInterval(this.intervalObject);
         },
         addResult() {
+            let that = this;
             if (true === this.user_authorized) {
                 let data = new FormData();
                 data.append('laps', JSON.stringify(this.laps));
@@ -261,7 +259,7 @@ export default {
                         console.log(response);
                     })
             } else {
-                alert('Зарегистрируйтесь, что бы ваш прогресс сохранялся')
+                that.display = '<p>Зарегистрируйтесь, что бы ваш прогресс сохранялся</p>';
             }
         },
     }
