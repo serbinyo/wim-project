@@ -1,8 +1,9 @@
 <template>
-    <div class="card">
+    <div class="card" id="wim-exercise">
         <div class="row row-bordered g-0">
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <h5 class="card-header m-0 me-2 pb-3">Упражнение</h5>
+
                 <div class="px-2 text-center">
                     <div class="canvas" v-if="isExercise">
                         <inhale-exhale v-if="isBreathingPhase"></inhale-exhale>
@@ -13,12 +14,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card-body">
                     <div class="text-center">
                         <lap-settings @start="start" :startExercise="start" v-if="isSettings"></lap-settings>
                         <div v-else>
                             <speech>{{ message }}</speech>
+                            <mini-audio
+                                ref="audioplayer"
+                                :loop="true"
+                                :preload="true"
+                                :autoplay="true"
+                                :audio-source="audio.trek"
+                            ></mini-audio>
                         </div>
                     </div>
                 </div>
@@ -63,6 +71,11 @@ export default {
         intervalObject  : null,
         //Время задержки дыхания на вдохе
         INHALE_TIME: INHALE_TIME,
+        audio: {
+            trek: '/assets/audio/medifon/Ян-душа.mp3'
+        },
+        //стандартные настройки
+        default: true
     }),
     methods   : {
         start(laps) {

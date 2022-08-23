@@ -28,8 +28,6 @@
             <button class="btn" @click="addLap">Добавить круг</button>
             <button class="btn btn-primary" @click="start">Старт</button>
         </div>
-
-
     </div>
 </template>
 
