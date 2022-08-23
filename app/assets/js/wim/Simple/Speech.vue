@@ -1,5 +1,5 @@
 <template>
-    <p><slot></slot></p>
+    <p class="fw-semibold"><slot></slot></p>
 </template>
 
 <script>
