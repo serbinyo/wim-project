@@ -34,9 +34,9 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6" style="">
                                 <a class="dropdown-item" :class="{'active' : defaultSetting}"
-                                   @click="defaultSetting = true">Стандарт</a>
+                                   @click="switchSettings('default')">Стандарт</a>
                                 <a class="dropdown-item" :class="{'active' : !defaultSetting}"
-                                   @click="defaultSetting = false">Настроить</a>
+                                   @click="switchSettings('settings')">Настроить</a>
                             </div>
                         </div>
                     </div>
@@ -44,16 +44,15 @@
                         <div v-if="defaultSetting">
                             <default-settings @start="start" :startExercise="start" v-if="isSettings">
                             </default-settings>
-                            <div v-else>
+                            <div v-show="!isSettings">
                                 <p>
                                     Следуй командам Вима для выполнения дыхательного упражнения<br>
                                     Если вы зарегистрированы результат выполнения будет сохранен в персональный аккаунт
                                 </p>
                                 <mini-audio
-                                    ref="audioplayer"
+                                    ref="audioplayerdefault"
                                     :loop="true"
                                     :preload="true"
-                                    :autoplay="true"
                                     :audio-source="audio.default"
                                 ></mini-audio>
                             </div>
@@ -61,13 +60,12 @@
                         </div>
                         <div v-else>
                             <lap-settings @start="start" :startExercise="start" v-if="isSettings"></lap-settings>
-                            <div v-else>
+                            <div v-show="!isSettings">
                                 <speech>{{ message }}</speech>
                                 <mini-audio
                                     ref="audioplayer"
                                     :loop="true"
                                     :preload="true"
-                                    :autoplay="true"
                                     :audio-source="audio.trek"
                                 ></mini-audio>
                             </div>
@@ -151,7 +149,15 @@ export default {
 
             this.noSleepStart();
 
+            this.playAudio();
+
             this.runLap(this.laps[this.n]);
+        },
+        reset() {
+            this.stopInterval();
+            this.isSettings = true;
+            this.isExercise = false;
+            this.isExerciseDone = false;
         },
         runLap(lap) {
             let that = this;
@@ -164,7 +170,6 @@ export default {
             // цикл, пока идет упражнение
             // done - очищать память после завершения (clear interval)
             that.intervalObject = setInterval(function () {
-
                     if (
                         true === that.isBreathingPhase
                         && true === that.needBreathingPhaseTimer
@@ -245,6 +250,19 @@ export default {
         stopInterval() {
             clearInterval(this.intervalObject);
         },
+        //region settings tabs
+        switchSettings(tab) {
+            this.reset();
+            this.defaultSetting = 'default' === tab;
+        },
+        playAudio() {
+            if (true === this.defaultSetting) {
+                this.$refs.audioplayerdefault.play();
+            } else {
+                this.$refs.audioplayer.play();
+            }
+        },
+        //endregion settings tabs
         addResult() {
             let that = this;
             if (true === this.user_authorized) {
