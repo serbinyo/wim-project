@@ -75,9 +75,10 @@ class RegistrationController extends AbstractController
             $em->flush();
 
             // Send confirmation email
+            // Временно убираем подтверждение регистрации на email
             // $mailer->sendConfirmationMessage($user);
-
-            return $this->redirectToRoute('need_to_confirm');
+            // return $this->redirectToRoute('need_to_confirm');
+            return $this->render('security/account_create.html.twig');
         }
 
         return $this->render(
