@@ -293,7 +293,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
     {
         return $this->findBy(
             [
-                ['user_id' => $user->getId()]
+                'user_id' => $user->getId()
             ]
         )->count();
     }

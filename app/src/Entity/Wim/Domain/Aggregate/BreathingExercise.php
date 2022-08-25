@@ -70,6 +70,11 @@ class BreathingExercise
     private DateTimeImmutable $dateCreate;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private ?DateInterval $duration = null;
+
+    /**
      * BreathingExercise constructor.
      *
      * @param Ulid          $uuid
@@ -122,7 +127,7 @@ class BreathingExercise
             $lap->setBreathingExercise($this);
         }
 
-        $this->countDuration();
+        $this->duration = $this->countDuration();
 
         return $this;
     }
@@ -167,7 +172,10 @@ class BreathingExercise
      */
     public function getDuration(): DateInterval
     {
-        return $this->countDuration();
+        if (!$this->duration) {
+            $this->duration = $this->countDuration();
+        }
+        return $this->duration;
     }
 
     /**

@@ -42,9 +42,9 @@ class SecurityController extends AbstractController
      *
      * @throws Exception
      */
-    public function checkUser(AuthorizationCheckerInterface $authorizationChecker)
+    public function checkUser()
     {
-        $isRoleUser = $authorizationChecker->isGranted('ROLE_USER');
+        $isRoleUser = $this->isGranted('ROLE_USER');
 
         return $this->json(['result' => $isRoleUser], Response::HTTP_OK, [], []);
     }
