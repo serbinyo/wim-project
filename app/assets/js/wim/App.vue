@@ -61,7 +61,7 @@
                         <div v-else>
                             <lap-settings @start="start" :startExercise="start" v-if="isSettings"></lap-settings>
                             <div v-show="!isSettings">
-                                <speech>{{ message }}</speech>
+                                <speech v-html="message"></speech>
                                 <mini-audio
                                     ref="audioplayer"
                                     :loop="true"
@@ -122,7 +122,7 @@ export default {
         },
         //стандартные настройки
         defaultSetting : true,
-        user_authorized: null
+        user_authorized: false
     }),
     mounted() {
         let that = this;
@@ -230,7 +230,13 @@ export default {
                 this.isExerciseDone = true;
                 this.addResult();
 
-                this.message = 'Молодец!';
+                //Сообщение о завершении упражнения
+                if (this.user_authorized) {
+                    this.message = 'Отлично! Результат сохранен.';
+                } else {
+                    this.message = 'Упражнение выполнено. ' +
+                        '<a href="/registration">Зарегистрируйтесь</a>, если вы хотите что бы ваши результаты сохранялись.';
+                }
             }
         },
         noSleepStart() {
@@ -265,7 +271,7 @@ export default {
         //endregion settings tabs
         addResult() {
             let that = this;
-            if (true === this.user_authorized) {
+            if (this.user_authorized) {
                 let data = new FormData();
                 data.append('laps', JSON.stringify(this.laps));
                 axios.post(
