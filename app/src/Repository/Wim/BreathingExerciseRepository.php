@@ -145,6 +145,8 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
                 UserRepository::TABLE,
                 self::USER_TABLE_ALIAS,
                 "$u.id = $be.user_id"
+            )->orderBy(
+                "$be.session_number", 'desc'
             );
 
         $res = $this->filter($qb, $filter)

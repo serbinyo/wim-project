@@ -35,7 +35,12 @@ class Handler
             throw new RuntimeException('Не задан пользователь');
         }
 
-        $breathingExercises = $this->breathingExerciseRepository->findBy(['user_id' => $user->getId()]);
+        $breathingExercises = $this->breathingExerciseRepository->findBy(
+            [
+                'user_id' => $user->getId(),
+                'limit' => 7
+            ]
+        );
         $user->setBreathingExercises($breathingExercises);
 
         return $user;
