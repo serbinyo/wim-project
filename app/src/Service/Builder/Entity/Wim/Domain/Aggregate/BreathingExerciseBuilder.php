@@ -34,6 +34,7 @@ class BreathingExerciseBuilder
         );
 
         $exercise->addLap(LapBuilder::buildTestObject());
+        $exercise->setSessionNumber(123);
 
         return $exercise;
     }

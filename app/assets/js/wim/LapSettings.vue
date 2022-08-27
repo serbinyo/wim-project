@@ -56,13 +56,13 @@ export default {
             },
             {
                 number: 2,
-                breaths : 28,
+                breaths : 30,
                 waitingTime : 60,
                 inhaleHold : INHALE_TIME
             },
             {
                 number: 3,
-                breaths : 26,
+                breaths : 30,
                 waitingTime : 90,
                 inhaleHold : INHALE_TIME
             }

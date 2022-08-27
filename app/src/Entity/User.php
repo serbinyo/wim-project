@@ -262,12 +262,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->breathingExercises;
     }
 
-    public function addBreathing(BreathingExercise $breathingExercise): self
+    public function setBreathingExercises(ArrayCollection $breathingExercises): self
     {
-        if (!$this->breathingExercises->contains($breathingExercise)) {
-            $this->breathingExercises[] = $breathingExercise;
-            $breathingExercise->setUser($this);
-        }
+
+        $this->breathingExercises = $breathingExercises;
 
         return $this;
     }

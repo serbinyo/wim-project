@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\UseCase\Wim\FillUserExercises\Command;
+use App\UseCase\Wim\FillUserExercises;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
@@ -26,12 +28,19 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name="homepage")
      *
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function index()
+    public function index(FillUserExercises\Handler $getExercisesService)
     {
-        $response =  $this->render('index/index.html.twig', [
-            'controller_name' => 'IndexController',
-        ]);
+        $user = $this->getUser();
+
+        if ($user !== null) {
+            $getExercisesService->handle(
+                new Command($user)
+            );
+        }
+
+        $response =  $this->render('index/index.html.twig');
 
         return $response;
     }

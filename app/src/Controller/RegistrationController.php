@@ -75,9 +75,10 @@ class RegistrationController extends AbstractController
             $em->flush();
 
             // Send confirmation email
-            $mailer->sendConfirmationMessage($user);
-
-            return $this->redirectToRoute('need_to_confirm');
+            // Временно убираем подтверждение регистрации на email
+            // $mailer->sendConfirmationMessage($user);
+            // return $this->redirectToRoute('need_to_confirm');
+            return $this->render('security/account_create.html.twig');
         }
 
         return $this->render(
@@ -105,7 +106,7 @@ class RegistrationController extends AbstractController
         $user = $userRepository->findOneBy(['confirmationCode' => $code]);
 
         if ($user === null) {
-            return new Response('404'); //todo вурнуть нормальную 404 ошибку
+            return new Response('404'); //todo вернуть нормальную 404 ошибку
         }
 
         $user->clearConfirmationCode();

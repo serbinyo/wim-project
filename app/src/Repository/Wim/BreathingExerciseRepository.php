@@ -145,6 +145,8 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
                 UserRepository::TABLE,
                 self::USER_TABLE_ALIAS,
                 "$u.id = $be.user_id"
+            )->orderBy(
+                "$be.session_number", 'desc'
             );
 
         $res = $this->filter($qb, $filter)
@@ -293,7 +295,7 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
     {
         return $this->findBy(
             [
-                ['user_id' => $user->getId()]
+                'user_id' => $user->getId()
             ]
         )->count();
     }
