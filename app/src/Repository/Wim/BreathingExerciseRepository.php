@@ -437,14 +437,14 @@ class BreathingExerciseRepository implements BreathingExerciseRepositoryInterfac
     private function lapFromArray(array $data): Lap
     {
         $lapSet = new LapSet(
-            $data['breaths'],
-            $data['exhale_hold'],
-            $data['inhale_hold']
+            (int)$data['breaths'],
+            (int)$data['exhale_hold'],
+            (int)$data['inhale_hold']
         );
 
         $lap = new Lap(
             new Ulid($data['id']),
-            $data['number'],
+            (int)$data['number'],
             $lapSet
         );
 
