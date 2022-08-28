@@ -5,7 +5,16 @@
                 <h5 class="card-header m-0 me-2 pb-3">Упражнение</h5>
 
                 <div class="px-2 text-center">
-                    <div class="canvas" v-if="isExercise">
+                    <div class="canvas mb-2" v-if="isExercise && defaultSetting">
+                        <iframe width="560" height="315"
+                                src="https://www.youtube-nocookie.com/embed/mD3QwerSmLs?autoplay=1"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write;
+                                encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="canvas" v-else-if="isExercise">
                         <inhale-exhale
                             :counter="!defaultSetting"
                             v-if="isBreathingPhase"></inhale-exhale>
@@ -17,6 +26,7 @@
                     <div v-else-if="isExerciseDone">
                         <img src="/assets/img/elements/fi-success.png"
                              alt="You did it" class="rounded mb-5">
+                        <p class="fw-semibold">Результат сохранен</p>
                     </div>
                     <div v-else v-html="display"></div>
                 </div>
@@ -42,24 +52,35 @@
                     </div>
                     <div class="text-center">
                         <div v-if="defaultSetting">
-                            <default-settings @start="start" :startExercise="start" v-if="isSettings">
+                            <default-settings :startExercise="start" v-if="isSettings">
                             </default-settings>
-                            <div v-show="!isSettings">
+                            <div v-else-if="!isSettings && isSaveWindow">
+                                <p>Если нужно уточните данные или добавьте круги,
+                                    в соответствии с выполненным упражнением, после этого нажмите Сохранить</p>
+                                <lap-settings
+                                    :startExercise="start"
+                                    :saveResult="addResult"
+                                >
+                                </lap-settings>
+                            </div>
+                            <div v-else-if="!isSettings">
                                 <p>
-                                    Следуй командам Вима для выполнения дыхательного упражнения<br>
-                                    Если вы зарегистрированы результат выполнения будет сохранен в персональный аккаунт
+                                    Следуй командам Вима для выполнения дыхательного упражнения
                                 </p>
-                                <mini-audio
-                                    ref="audioplayerdefault"
-                                    :loop="true"
-                                    :preload="true"
-                                    :audio-source="audio.default"
-                                ></mini-audio>
+                                <p class="mt-2">
+                                    Когда вы закончите,
+                                    <button
+                                        @click="goSave"
+                                        class="btn
+                                    btn-outline-warning mt-2">
+                                        Перейдите к сохранению результата
+                                    </button>
+                                </p>
                             </div>
 
                         </div>
                         <div v-else>
-                            <lap-settings @start="start" :startExercise="start" v-if="isSettings"></lap-settings>
+                            <lap-settings :startExercise="start" v-if="isSettings"></lap-settings>
                             <div v-show="!isSettings">
                                 <speech v-html="message"></speech>
                                 <mini-audio
@@ -95,6 +116,7 @@ export default {
         isSettings      : true,
         isExercise      : false,
         isExerciseDone  : false,
+        isSaveWindow    : false,
         laps            : [
             {
                 number     : 0,
@@ -158,6 +180,7 @@ export default {
             this.isSettings = true;
             this.isExercise = false;
             this.isExerciseDone = false;
+            this.isSaveWindow = false;
         },
         runLap(lap) {
             let that = this;
@@ -235,7 +258,8 @@ export default {
                     this.message = 'Отлично! Результат сохранен.';
                 } else {
                     this.message = 'Упражнение выполнено. ' +
-                        '<a href="/registration">Зарегистрируйтесь</a>, если вы хотите что бы ваши результаты сохранялись.';
+                        '<a href="/registration">Зарегистрируйтесь</a>, если вы хотите ' +
+                        'что бы ваши результаты сохранялись.';
                 }
             }
         },
@@ -262,15 +286,18 @@ export default {
             this.defaultSetting = 'default' === tab;
         },
         playAudio() {
-            if (true === this.defaultSetting) {
-                this.$refs.audioplayerdefault.play();
-            } else {
+            if (!this.defaultSetting) {
                 this.$refs.audioplayer.play();
             }
+        },
+        goSave() {
+            this.isSettings = false;
+            this.isSaveWindow = true;
         },
         //endregion settings tabs
         addResult() {
             let that = this;
+
             if (this.user_authorized) {
                 let data = new FormData();
                 data.append('laps', JSON.stringify(this.laps));
@@ -280,7 +307,9 @@ export default {
                 )
                     .then(function (response) {
                         // handle success
-                        console.log(response);
+                        that.reset();
+                        that.isExerciseDone = true;
+                        that.display = '<p>Результат сохранен</p>'
                     })
             } else {
                 that.display = '<p>Зарегистрируйтесь, что бы ваш прогресс сохранялся</p>';

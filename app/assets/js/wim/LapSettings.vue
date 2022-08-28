@@ -26,7 +26,9 @@
 
         <div class="row">
             <button class="btn" @click="addLap">Добавить круг</button>
-            <button class="btn btn-primary" @click="start">Старт</button>
+
+            <button v-if="!saveResult" class="btn btn-primary" @click="start">Старт</button>
+            <button v-if="saveResult" class="btn btn-primary" @click="saveResult">Сохранить результат</button>
         </div>
     </div>
 </template>
@@ -42,31 +44,42 @@ export default {
     setup () {
         return { v$: useVuelidate() }
     },
-    props: [
-        'startExercise'
-    ],
+    props: {
+        startExercise: {
+            type: Function
+        },
+        saveResult: {
+            type: Function,
+            default: null
+        },
+        laps: {
+            type: Array,
+            default() {
+                return [
+                    {
+                        number: 1,
+                        breaths : 30,
+                        waitingTime : 30,
+                        inhaleHold : INHALE_TIME
+                    },
+                    {
+                        number: 2,
+                        breaths : 30,
+                        waitingTime : 60,
+                        inhaleHold : INHALE_TIME
+                    },
+                    {
+                        number: 3,
+                        breaths : 30,
+                        waitingTime : 90,
+                        inhaleHold : INHALE_TIME
+                    }
+                ]
+            }
+        }
+    },
     data: () => ({
         INHALE_TIME: INHALE_TIME,
-        laps    : [
-            {
-                number: 1,
-                breaths : 30,
-                waitingTime : 30,
-                inhaleHold : INHALE_TIME
-            },
-            {
-                number: 2,
-                breaths : 30,
-                waitingTime : 60,
-                inhaleHold : INHALE_TIME
-            },
-            {
-                number: 3,
-                breaths : 30,
-                waitingTime : 90,
-                inhaleHold : INHALE_TIME
-            }
-        ],
     }),
     validations () {
         return {
