@@ -122,7 +122,7 @@ export default {
         //Время задержки дыхания на вдохе
         INHALE_TIME: INHALE_TIME,
         audio      : {
-            trek   : '/assets/audio/medifon/Ян-душа.mp3',
+            trek   : '/assets/audio/medifon/Лес.mp3',
             default: '/assets/audio/wim/default-ru.mp3'
         }
     }),
