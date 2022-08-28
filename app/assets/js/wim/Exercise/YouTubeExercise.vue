@@ -33,7 +33,7 @@
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6" style="">
                                 <a class="dropdown-item active">YouTube Вариант</a>
                                 <a class="dropdown-item"
-                                   @click="switchSettings('settings')">Свой вариант</a>
+                                   @click="$emit('switchType', 'custom')">Свой вариант</a>
                             </div>
                         </div>
                     </div>
@@ -51,8 +51,7 @@
                                 <p>Если нужно уточните данные или добавьте круги,
                                     в соответствии с выполненным упражнением, после этого нажмите Сохранить</p>
                                 <lap-settings
-                                    :saveResult="saveResult"
-                                >
+                                    :saveResult="saveResult">
                                 </lap-settings>
                             </div>
                             <div v-else-if="!isSettings">
@@ -97,7 +96,6 @@ export default {
         isSettings      : true,
         isExercise      : false,
         isSaveWindow    : false,
-        isBreathingPhase: true,
         display         : '',
         //Время задержки дыхания на вдохе
 
@@ -109,10 +107,7 @@ export default {
             this.isSettings = false;
             this.isExercise = true;
         },
-        //region settings tabs
-        switchSettings(tab) {
-            // todo emmit
-        },
+        //region settings tabs,
         goSave() {
             this.isSettings = false;
             this.isSaveWindow = true;

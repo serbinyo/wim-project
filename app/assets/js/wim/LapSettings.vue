@@ -51,7 +51,7 @@ export default {
             type: Function,
             default: null
         },
-        inhale_time: {
+        inhaleTime: {
             type: Number,
             default: 15
         },
@@ -63,19 +63,19 @@ export default {
                         number: 1,
                         breaths : 30,
                         waitingTime : 30,
-                        inhaleHold : this.inhale_time
+                        inhaleHold : this.inhaleTime
                     },
                     {
                         number: 2,
                         breaths : 30,
                         waitingTime : 60,
-                        inhaleHold : this.inhale_time
+                        inhaleHold : this.inhaleTime
                     },
                     {
                         number: 3,
                         breaths : 30,
                         waitingTime : 90,
-                        inhaleHold : this.inhale_time
+                        inhaleHold : this.inhaleTime
                     }
                 ]
             }
@@ -97,7 +97,7 @@ export default {
                 number: this.laps.length + 1,
                 breaths : '',
                 waitingTime : '',
-                inhaleHold : this.inhale_time
+                inhaleHold : this.inhaleTime
             });
         },
         async start () {

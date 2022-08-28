@@ -1,7 +1,15 @@
 <template>
     <div id="wim-exercise">
         <div v-if="!isExerciseDone">
-            <you-tube-exercise :saveResult="addResult"></you-tube-exercise>
+            <you-tube-exercise
+                v-if="'youtube' === exerciseType"
+                @switchType="switchExerciseType"
+                :saveResult="addResult"></you-tube-exercise>
+            <custom-exercise
+                v-if="'custom' === exerciseType"
+                @switchType="switchExerciseType"
+                :saveResult="addResult"
+            ></custom-exercise>
         </div>
         <div v-else>
             <div class="card">
@@ -19,14 +27,16 @@
 
 <script>
 import YouTubeExercise from "./Exercise/YouTubeExercise";
+import CustomExercise from "./Exercise/CustomExercise";
 
 const axios = require('axios').default;
 
 export default {
-    components: {YouTubeExercise},
+    components: {CustomExercise, YouTubeExercise},
     data      : () => ({
         isExerciseDone : false,
         user_authorized: false,
+        exerciseType : 'youtube',
     }),
     mounted() {
         let that = this;
@@ -44,10 +54,10 @@ export default {
             })
     },
     methods: {
+        switchExerciseType(type) {
+            this.exerciseType = type;
+        },
         addResult(laps) {
-
-            console.log(laps)
-
             let that = this;
 
             if (this.user_authorized) {
