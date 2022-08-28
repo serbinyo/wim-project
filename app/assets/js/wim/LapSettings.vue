@@ -26,7 +26,9 @@
 
         <div class="row">
             <button class="btn" @click="addLap">Добавить круг</button>
-            <button class="btn btn-primary" @click="start">Старт</button>
+
+            <button v-if="!saveResult" class="btn btn-primary" @click="start">Старт</button>
+            <button v-if="saveResult" class="btn btn-primary" @click="save">Сохранить результат</button>
         </div>
     </div>
 </template>
@@ -36,37 +38,51 @@
 import useVuelidate from '@vuelidate/core'
 import { helpers, noEmptyLapSettings  } from '../classes/Vuelidate/Validators'
 
-const INHALE_TIME = 15;
-
 export default {
     setup () {
         return { v$: useVuelidate() }
     },
-    props: [
-        'startExercise'
-    ],
-    data: () => ({
-        INHALE_TIME: INHALE_TIME,
-        laps    : [
-            {
-                number: 1,
-                breaths : 30,
-                waitingTime : 30,
-                inhaleHold : INHALE_TIME
-            },
-            {
-                number: 2,
-                breaths : 30,
-                waitingTime : 60,
-                inhaleHold : INHALE_TIME
-            },
-            {
-                number: 3,
-                breaths : 30,
-                waitingTime : 90,
-                inhaleHold : INHALE_TIME
+    props: {
+        startExercise: {
+            type: Function,
+            default: null
+        },
+        saveResult: {
+            type: Function,
+            default: null
+        },
+        inhaleTime: {
+            type: Number,
+            default: 15
+        },
+        laps: {
+            type: Array,
+            default() {
+                return [
+                    {
+                        number: 1,
+                        breaths : 30,
+                        waitingTime : 30,
+                        inhaleHold : this.inhaleTime
+                    },
+                    {
+                        number: 2,
+                        breaths : 30,
+                        waitingTime : 60,
+                        inhaleHold : this.inhaleTime
+                    },
+                    {
+                        number: 3,
+                        breaths : 30,
+                        waitingTime : 90,
+                        inhaleHold : this.inhaleTime
+                    }
+                ]
             }
-        ],
+        }
+    },
+    data: () => ({
+
     }),
     validations () {
         return {
@@ -81,7 +97,7 @@ export default {
                 number: this.laps.length + 1,
                 breaths : '',
                 waitingTime : '',
-                inhaleHold : INHALE_TIME
+                inhaleHold : this.inhaleTime
             });
         },
         async start () {
@@ -91,6 +107,14 @@ export default {
             }
 
             this.startExercise(this.laps);
+        },
+        async save () {
+            const isFormCorrect = await this.v$.$validate();
+            if (!isFormCorrect) {
+                return;
+            }
+
+            this.saveResult(this.laps);
         }
     }
 }
