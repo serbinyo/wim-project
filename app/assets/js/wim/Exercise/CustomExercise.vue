@@ -43,8 +43,16 @@
                                 :inhale-time="INHALE_TIME"
                             >
                             </lap-settings>
-                            <div v-show="!isSettings">
-                                <speech v-html="message"></speech>
+                            <div v-else-if="!isSettings && isSaveWindow" class="mb-4">
+                                <p>Если нужно уточните данные или добавьте круги,
+                                    в соответствии с выполненным упражнением, после этого нажмите Сохранить</p>
+                                <lap-settings
+                                    :laps="laps"
+                                    :saveResult="saveResult">
+                                </lap-settings>
+                            </div>
+                            <div v-show="!isSettings" class="mt-3">
+                                <speech v-if="!isSaveWindow" v-html="message"></speech>
                                 <mini-audio
                                     ref="audioplayer"
                                     :loop="true"
@@ -82,6 +90,7 @@ export default {
     data      : () => ({
         isSettings      : true,
         isExercise      : false,
+        isSaveWindow    : false,
         laps            : [
             {
                 number     : 0,
@@ -193,7 +202,8 @@ export default {
                 //упражнение закончено
                 this.noSleepEnd();
                 this.isExercise = false;
-                this.saveResult(this.laps);
+                //this.saveResult(this.laps);
+                this.goSave();
             }
         },
         noSleepStart() {
@@ -217,6 +227,10 @@ export default {
         playAudio() {
             this.$refs.audioplayer.play();
         },
+        goSave() {
+            this.isSettings = false;
+            this.isSaveWindow = true;
+        }
         //endregion settings tabs
     }
 }
