@@ -43,6 +43,7 @@
                                 :inhale-time="INHALE_TIME"
                             >
                             </lap-settings>
+
                             <div v-else-if="!isSettings && isSaveWindow" class="mb-4">
                                 <p>Если нужно уточните данные или добавьте круги,
                                     в соответствии с выполненным упражнением, после этого нажмите Сохранить</p>
@@ -51,8 +52,18 @@
                                     :saveResult="saveResult">
                                 </lap-settings>
                             </div>
+
                             <div v-show="!isSettings" class="mt-3">
                                 <speech v-if="!isSaveWindow" v-html="message"></speech>
+
+                                <div class="d-grid gap-2 col-lg-6 mx-auto mt-5">
+                                    <button
+                                        @click="reset"
+                                        class="btn rounded-pill btn-lg btn-outline-danger">
+                                        Сброс
+                                    </button>
+                                </div>
+
                                 <mini-audio
                                     ref="audioplayer"
                                     :loop="true"
@@ -115,7 +126,7 @@ export default {
             default: '/assets/audio/wim/default-ru.mp3'
         }
     }),
-    methods: {
+    methods   : {
         start(laps) {
             this.laps = laps;
 
@@ -131,6 +142,7 @@ export default {
         },
         reset() {
             this.stopInterval();
+            this.stopAudio();
             this.isSettings = true;
             this.isExercise = false;
         },
@@ -226,6 +238,9 @@ export default {
         //region settings tabs
         playAudio() {
             this.$refs.audioplayer.play();
+        },
+        stopAudio() {
+            this.$refs.audioplayer.stop();
         },
         goSave() {
             this.isSettings = false;
