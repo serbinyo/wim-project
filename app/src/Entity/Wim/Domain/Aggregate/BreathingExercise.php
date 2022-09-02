@@ -208,6 +208,14 @@ class BreathingExercise
     }
 
     /**
+     * @return DateTimeImmutable
+     */
+    public function getDateCreate(): DateTimeImmutable
+    {
+        return $this->dateCreate;
+    }
+
+    /**
      * @return bool
      */
     public function isEmpty()
