@@ -82,7 +82,7 @@ class BreathingExerciseDeserializer
         $serializer = new Serializer(
             [
                 new DateIntervalNormalizer(['dateinterval_format' => '%s']),
-                new DateTimeNormalizer(),
+                new DateTimeNormalizer(['datetime_format' => 'd.m.Y']),
                 new ObjectNormalizer()
             ]
         );
@@ -98,7 +98,9 @@ class BreathingExerciseDeserializer
                         'user' => ['id'],
                         'laps' => ['number', 'set'],
                         'uuid' => ['ulid'],
-                        'duration'
+                        'duration',
+                        'maxExhaleHold',
+                        'maxBreaths'
                     ]
             ]
         );
@@ -116,7 +118,6 @@ class BreathingExerciseDeserializer
     {
         $data['uuid'] = $data['uuid']['ulid'];
         $data['duration'] = DateConverter::secToStr((int)$data['duration']);
-        $data['dateCreate'] = (new DateTime($data['dateCreate']))->format('d.m.Y');
         foreach ($data['laps'] as $li => $lap) {
             $data['laps'][$li]['set']['lapTime'] = DateConverter::secToStr((int)$lap['set']['lapTime']);
         }

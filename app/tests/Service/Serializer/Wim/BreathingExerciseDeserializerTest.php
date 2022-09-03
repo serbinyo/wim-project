@@ -52,6 +52,8 @@ class BreathingExerciseDeserializerTest extends TestCase
             'user'          => ['id' => 1],
             'sessionNumber' => 123,
             'dateCreate'    => '31.12.9999',
+            'maxExhaleHold' => 60,
+            'maxBreaths' => 30
         ];
 
         self::assertEquals($standard, $result);
@@ -64,7 +66,7 @@ class BreathingExerciseDeserializerTest extends TestCase
     {
         $result = BreathingExerciseDeserializer::deserialize($this->exercise, 'json');
 
-        $json = '{"uuid":"57d8a1e6-9366-4c7f-98a8-092f87878e6d","duration":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434","laps":[{"number":1,"set":{"exhaleHold":60,"inhaleHold":15,"breaths":30,"lapTime":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434"}}],"user":{"id":1},"sessionNumber":123,"dateCreate":"31.12.9999"}';
+        $json = '{"uuid":"57d8a1e6-9366-4c7f-98a8-092f87878e6d","duration":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434","laps":[{"number":1,"set":{"exhaleHold":60,"inhaleHold":15,"breaths":30,"lapTime":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434"}}],"user":{"id":1},"sessionNumber":123,"dateCreate":"31.12.9999","maxExhaleHold":60,"maxBreaths":30}';
 
         self::assertEquals($json, $result);
     }
@@ -101,6 +103,8 @@ class BreathingExerciseDeserializerTest extends TestCase
                 'user'          => ['id' => 1],
                 'sessionNumber' => 123,
                 'dateCreate'    => '31.12.9999',
+                'maxExhaleHold' => 60,
+                'maxBreaths' => 30
             ],
             [
                 'uuid'          => '57d8a1e6-9366-4c7f-98a8-092f87878e6d',
@@ -120,6 +124,8 @@ class BreathingExerciseDeserializerTest extends TestCase
                 'user'          => ['id' => 1],
                 'sessionNumber' => 222,
                 'dateCreate'    => '31.12.9999',
+                'maxExhaleHold' => 60,
+                'maxBreaths' => 30
             ]
         ];
 
@@ -139,7 +145,7 @@ class BreathingExerciseDeserializerTest extends TestCase
             $exercise2
         ]), 'json');
 
-        $standard = '[{"uuid":"57d8a1e6-9366-4c7f-98a8-092f87878e6d","duration":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434","laps":[{"number":1,"set":{"exhaleHold":60,"inhaleHold":15,"breaths":30,"lapTime":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434"}}],"user":{"id":1},"sessionNumber":123,"dateCreate":"31.12.9999"},{"uuid":"57d8a1e6-9366-4c7f-98a8-092f87878e6d","duration":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434","laps":[{"number":1,"set":{"exhaleHold":60,"inhaleHold":15,"breaths":30,"lapTime":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434"}}],"user":{"id":1},"sessionNumber":222,"dateCreate":"31.12.9999"}]';
+        $standard = '[{"uuid":"57d8a1e6-9366-4c7f-98a8-092f87878e6d","duration":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434","laps":[{"number":1,"set":{"exhaleHold":60,"inhaleHold":15,"breaths":30,"lapTime":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434"}}],"user":{"id":1},"sessionNumber":123,"dateCreate":"31.12.9999","maxExhaleHold":60,"maxBreaths":30},{"uuid":"57d8a1e6-9366-4c7f-98a8-092f87878e6d","duration":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434","laps":[{"number":1,"set":{"exhaleHold":60,"inhaleHold":15,"breaths":30,"lapTime":"3 \u043c\u0438\u043d\u0443\u0442\u044b 30 \u0441\u0435\u043a\u0443\u043d\u0434"}}],"user":{"id":1},"sessionNumber":222,"dateCreate":"31.12.9999","maxExhaleHold":60,"maxBreaths":30}]';
 
         self::assertEquals($standard, $result);
     }

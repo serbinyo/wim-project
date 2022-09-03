@@ -216,6 +216,38 @@ class BreathingExercise
     }
 
     /**
+     * @return int
+     */
+    public function getMaxExhaleHold(): int
+    {
+        $maxHold = 0;
+
+        foreach ($this->getLaps() as $lap) {
+            if ($lap->getExhaleHold() > $maxHold) {
+                $maxHold = $lap->getExhaleHold();
+            }
+        }
+
+        return $maxHold;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxBreaths(): int
+    {
+        $maxBreaths = 0;
+
+        foreach ($this->getLaps() as $lap) {
+            if ($lap->getBreaths() > $maxBreaths) {
+                $maxBreaths = $lap->getBreaths();
+            }
+        }
+
+        return $maxBreaths;
+    }
+
+    /**
      * @return bool
      */
     public function isEmpty()

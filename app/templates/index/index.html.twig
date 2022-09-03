@@ -130,21 +130,25 @@
                         </div>
                         <div class="card-body">
                             <ul class="p-0 m-0">
-                                {% if app.user.breathingExercises and app.user.breathingExercises|length > 0  %}
-                                {% for breathingExercise  in  app.user.breathingExercises %}
+                                {% if userExercises and userExercises|length > 0  %}
+                                {% for breathingExercise  in  userExercises %}
                                     <li class="d-flex mb-4 pb-1">
                                         <div class="avatar flex-shrink-0 me-3">
                                             <img src="../assets/img/icons/brands/asana.png" alt="User"
                                                  class="rounded"/>
                                         </div>
-                                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between">
                                             <div class="me-2">
-                                                <small class="text-muted d-block mb-1">Номер: {{ breathingExercise.sessionNumber }}</small>
-                                                <h6 class="mb-0">Кругов: {{ breathingExercise.laps|length }}</h6>
+                                                <small class="d-block mb-2">Упражнение номер: {{ breathingExercise.sessionNumber }}</small>
+                                                <span class="text-muted d-block mb-1">{{ breathingExercise.duration }}</span>
                                             </div>
-                                            <div class="user-progress d-flex align-items-center gap-1">
-                                                <h6 class="mb-0">{{ breathingExercise.duration.s }}</h6>
-                                                <span class="text-muted">сек.</span>
+                                            <div class="me-2">
+                                                <small class="d-block mb-2">{{ breathingExercise.dateCreate }}</small>
+                                                <h6 class="text-muted d-block mb-1">Кругов: {{ breathingExercise.laps|length }}</h6>
+                                            </div>
+                                            <div class="me-2">
+                                                <small class="text-muted d-block mb-1">Максимальная задержка дыхания: {{ breathingExercise.maxExhaleHold }}</small>
+                                                <small class="text-muted d-block mb-1">Максимальное количество вдохов-выдохов: {{ breathingExercise.maxBreaths }}</small>
                                             </div>
                                         </div>
                                     </li>
