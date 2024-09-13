@@ -1,3 +1,0 @@
-#!/bin/bash
-# This is a comment
-MERCURE_PUBLISHER_JWT_KEY='serbinyo' MERCURE_SUBSCRIBER_JWT_KEY='serbinyo' ./bin/mercure/mercure run -config ./bin/mercure/Caddyfile

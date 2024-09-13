@@ -2,3 +2,4 @@
 /.env
 .env.nginx.local
 docker-compose.back.yml
+composer.lock
